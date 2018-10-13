@@ -1,13 +1,7 @@
 package de.ids.mannheim.clarin.normalverbraucher;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -53,8 +47,8 @@ public class OrthoNormal {
         try {
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
-            System.err.format("Have got %d <w> nodes.\n",
-                    doc.getElementsByTagName("w").getLength());
+//            System.err.format("Have got %d <w> nodes.\n",
+//                    doc.getElementsByTagName("w").getLength());
             teiDictNormalizer.normalize(doc);
             DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
             LSSerializer lsSerializer = domImplementation.createLSSerializer();
