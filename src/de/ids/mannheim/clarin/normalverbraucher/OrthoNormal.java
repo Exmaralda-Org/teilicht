@@ -36,6 +36,12 @@ public class OrthoNormal {
         teiDictNormalizer = new TEINormalizer(dictNormalizer);
     }
     
+    
+    /**
+     * normalize using an EXMARaLDA-OrthoNormal-based normalizer:
+     * @param input, a TEI-encoded speech transcription
+     * @return a TEI-encoded speech transcription with nomalization in &lt;w&gt;
+     */
     @POST
     @Path("normalize")
     @Consumes("application/tei+xml;format-variant=tei-iso-spoken;tokenized=1")
