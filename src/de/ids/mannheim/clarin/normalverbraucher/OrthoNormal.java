@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -28,11 +29,11 @@ import org.xml.sax.SAXException;
 public class OrthoNormal {
     
     
-    private static WordNormalizer wordNormalizer;
-    private static TEINormalizer normalizer; 
+    private static DictionaryNormalizer dictNormalizer;
+    private static TEINormalizer teiDictNormalizer; 
     static {
-        wordNormalizer = new DictionaryNormalizer();
-        normalizer = new TEINormalizer(wordNormalizer);
+        dictNormalizer = new DictionaryNormalizer();
+        teiDictNormalizer = new TEINormalizer(dictNormalizer);
     }
     
     @POST
@@ -48,7 +49,7 @@ public class OrthoNormal {
             Document doc = builder.parse(input);
             System.err.format("Have got %d <w> nodes.\n",
                     doc.getElementsByTagName("w").getLength());
-            normalizer.normalize(doc);
+            teiDictNormalizer.normalize(doc);
             DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
             LSSerializer lsSerializer = domImplementation.createLSSerializer();
             return Response.ok(lsSerializer.writeToString(doc)).build();
@@ -63,5 +64,11 @@ public class OrthoNormal {
                     .status(400).entity(e.getStackTrace()).build());             
         }
     }
-    
+
+    @PUT
+    @Path("reload")
+    public void reloadDict(String content) {
+        dictNormalizer.reloadDict();
+    }
+
 }
