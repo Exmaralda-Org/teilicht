@@ -27,6 +27,7 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.SAXException;
 
+import de.ids.mannheim.clarin.mime.*;
 
 @Path("")
 public class OrthoNormal {
@@ -34,8 +35,6 @@ public class OrthoNormal {
     private final static Logger LOGGER = LoggerFactory.getLogger(
             OrthoNormal.class.getName());
     
-    private final static String TEI_MIME =
-            "application/tei+xml;format-variant=tei-iso-spoken;tokenized=1";
     private static DictionaryNormalizer dictNormalizer;
     private static TEINormalizer teiDictNormalizer; 
     static {
@@ -52,15 +51,17 @@ public class OrthoNormal {
     @POST
     @Path("normalize")
     @Consumes({
-        TEI_MIME,
-        "application/tei+xml;format-variant=tei-dta;tokenized=1", // DTA
-        "application/tei+xml",
-        "application/xml"
+        MIMETypes.TEI_SPOKEN,
+        MIMETypes.DTA,
+        MIMETypes.TEI,
+        MIMETypes.XML
     })
-    @Produces({TEI_MIME,
-            "application/tei+xml;format-variant=tei-dta;tokenized=1", // DTA
-            "application/tei+xml",
-            "application/xml"})
+    @Produces({
+        MIMETypes.TEI_SPOKEN,
+        MIMETypes.DTA,
+        MIMETypes.TEI,
+        MIMETypes.XML
+    })
 
     public Response normalize(InputStream input,
             @Context HttpServletRequest request) {
