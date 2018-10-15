@@ -68,7 +68,7 @@
                                         <cmdp:RefInputParameter>output</cmdp:RefInputParameter>
                                         <cmdp:Values>
                                             <cmdp:ParameterValue>
-                                                <cmdp:Value>applfisseniication/tei+xml;format-variant=tei-iso-spoken</cmdp:Value>
+                                                <cmdp:Value>application/tei+xml;format-variant=tei-iso-spoken</cmdp:Value>
                                                 <cmdp:Description>ISO/TEI for transcriptions of spoken language</cmdp:Description>
                                             </cmdp:ParameterValue>
                                         </cmdp:Values>
