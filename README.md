@@ -1,6 +1,6 @@
 ---
 author: Bernhard Fisseni
-title: A DGD endpoint for CLARIN-FCS
+title: Normalization services for TEI XML files
 ---
 
 # Purpose
