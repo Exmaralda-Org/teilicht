@@ -37,6 +37,7 @@
         <cmdp:LifeCycleStatus>development</cmdp:LifeCycleStatus>
         <cmdp:PublicationDate>2018-10-18</cmdp:PublicationDate>
         <cmdp:LastUpdate>2018-10-18</cmdp:LastUpdate>
+        <cmdp:ServiceDescriptionLocation cmd:ref="isoTei2tcfConverter"/>
         <cmdp:Contact>
           <cmdp:Email>clarin@ids-mannheim.de</cmdp:Email>
         </cmdp:Contact>
