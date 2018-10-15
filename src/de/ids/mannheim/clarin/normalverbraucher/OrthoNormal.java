@@ -28,7 +28,7 @@ import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.SAXException;
 
 
-@Path("orthonormal")
+@Path("")
 public class OrthoNormal {
     
     private final static Logger LOGGER = LoggerFactory.getLogger(
@@ -53,10 +53,14 @@ public class OrthoNormal {
     @Path("normalize")
     @Consumes({
         TEI_MIME,
-        "application/xml",
-        "text/xml"}
-    )
-    @Produces(TEI_MIME)
+        "application/tei+xml;format-variant=tei-dta;tokenized=1", // DTA
+        "application/tei+xml",
+        "application/xml"
+    })
+    @Produces({TEI_MIME,
+            "application/tei+xml;format-variant=tei-dta;tokenized=1", // DTA
+            "application/tei+xml",
+            "application/xml"})
 
     public Response normalize(InputStream input,
             @Context HttpServletRequest request) {
@@ -73,7 +77,9 @@ public class OrthoNormal {
             DOMImplementationLS domImplementation =
                     (DOMImplementationLS) doc.getImplementation();
             LSSerializer lsSerializer = domImplementation.createLSSerializer();
-            return Response.ok(lsSerializer.writeToString(doc)).build();
+            return Response.ok(
+                    lsSerializer.writeToString(doc),
+                    request.getContentType()).build();
         } catch (SAXException | ParserConfigurationException | IOException e) {
             throw new WebApplicationException(e, Response
                     .status(400).entity(e.getMessage()).build());             
