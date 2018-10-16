@@ -75,11 +75,7 @@ public class OrthoNormal {
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
                     Anonymize.getRemoteAddr(request));
             teiDictNormalizer.normalize(doc);
-            DOMImplementationLS domImplementation =
-                    (DOMImplementationLS) doc.getImplementation();
-            LSSerializer lsSerializer = domImplementation.createLSSerializer();
-            return Response.ok(
-                    lsSerializer.writeToString(doc),
+            return Response.ok(doc,
                     request.getContentType()).build();
         } catch (SAXException | ParserConfigurationException | IOException e) {
             throw new WebApplicationException(e, Response
