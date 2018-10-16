@@ -46,7 +46,7 @@ public class OrthoNormal {
     /**
      * normalize using an EXMARaLDA-OrthoNormal-based normalizer:
      * @param input, a TEI-encoded speech transcription
-     * @return a TEI-encoded speech transcription with nomalization in &lt;w&gt;
+     * @return a TEI-encoded speech transcription with normalization in &lt;w&gt;
      */
     @POST
     @Path("normalize")
