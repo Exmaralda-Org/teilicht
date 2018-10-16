@@ -5,9 +5,9 @@
          version="4.0">
   <display-name>OrthoNormalVerbraucher</display-name>
   <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
@@ -19,6 +19,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>orthonormal</servlet-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/services/*</url-pattern>
   </servlet-mapping>
 </web-app>
