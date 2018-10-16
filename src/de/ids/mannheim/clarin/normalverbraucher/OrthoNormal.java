@@ -83,14 +83,14 @@ public class OrthoNormal {
         }
     }
 
-    /**
-     * reload dictionaries
-     * @param content – will be disregarded
-     */
-    @PUT
-    @Path("reload")
-    public void reloadDict(String content) {
-        dictNormalizer.reloadDict();
-    }
+//    /**
+//     * reload dictionaries
+//     * @param content – will be disregarded
+//     */
+//    @PUT
+//    @Path("reload")
+//    public void reloadDict(String content) {
+//        DictionaryNormalizer.reloadDict();
+//    }
 
 }
