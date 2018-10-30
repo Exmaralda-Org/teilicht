@@ -3,7 +3,6 @@ package de.ids.mannheim.clarin.teispeech.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -31,6 +30,7 @@ import org.xml.sax.SAXException;
 
 import de.ids.mannheim.clarin.mime.MIMETypes;
 import de.ids.mannheim.clarin.teispeech.tools.DocUtilities;
+import de.ids.mannheim.clarin.teispeech.tools.LanguageDetect;
 import de.ids.mannheim.clarin.teispeech.tools.TEINormalizer;
 import de.ids.mannheim.clarin.teispeech.tools.TEIPOS;
 import de.ids.mannheim.clarin.teispeech.tools.TextToTEIConversion;
@@ -151,7 +151,7 @@ public class OrthoNormal {
     }
 
     /**
-     * pos-tag a TEI ISO transcription:
+     * POS-tag a TEI ISO transcription:
      *
      * @param input
      *            the input document
@@ -227,19 +227,20 @@ public class OrthoNormal {
             @Context HttpServletRequest request) {
         try {
             checkLanguage(language);
-            expected.stream().map(OrthoNormal::checkLanguage)
-                    .collect(Collectors.toList());
+            String[] expectedLangs = expected.stream()
+                    .map(OrthoNormal::checkLanguage).toArray(String[]::new);
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
             DocumentBuilder builder;
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
-            TEIPOS teipo = new TEIPOS(doc, language);
+            LanguageDetect guesser = new LanguageDetect(doc, language,
+                    expectedLangs);
             LOGGER.info("Processing <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
                     Anonymize.anonymizeAddr(request));
-            teipo.posTag(force);
+            guesser.detect(force);
             return Response.ok(doc, request.getContentType()).build();
         } catch (IllegalArgumentException | SAXException
                 | ParserConfigurationException | IOException e) {
