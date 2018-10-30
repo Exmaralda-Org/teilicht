@@ -6,16 +6,17 @@ package de.ids.mannheim.clarin.mime;
 public class MIMETypes {
 
     /**
-     * <a href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/TS.html">transcriptions of speech</a>
+     * <a href=
+     * "http://www.tei-c.org/release/doc/tei-p5-doc/en/html/TS.html">transcriptions
+     * of speech</a>
      */
-    public final static String TEI_SPOKEN =
-            "application/tei+xml;format-variant=tei-iso-spoken;tokenized=1";
+    public final static String TEI_SPOKEN = "application/tei+xml;format-variant=tei-iso-spoken;tokenized=1";
 
     /**
-     * <a href="http://www.deutschestextarchiv.de">Data by Deutsches Textarchiv</a>
+     * <a href="http://www.deutschestextarchiv.de">Data by Deutsches
+     * Textarchiv</a>
      */
-    public final static String DTA =
-            "application/tei+xml;format-variant=tei-dta;tokenized=1";
+    public final static String DTA = "application/tei+xml;format-variant=tei-dta;tokenized=1";
 
     /**
      * any <a href="http://www.tei-c.org/release/doc">TEI</a> XML
@@ -26,4 +27,9 @@ public class MIMETypes {
      * <a href="https://www.w3.org/XML/">any XML</a>
      */
     public final static String XML = "application/xml";
+
+    /**
+     * the only REAL text
+     */
+    public final static String PLAIN_TEXT = "text/plain";
 }

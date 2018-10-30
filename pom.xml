@@ -42,7 +42,7 @@
   <dependencies>
     <dependency>
       <groupId>de.ids-mannheim.clarin</groupId>
-      <artifactId>normal</artifactId>
+      <artifactId>teispeechtools</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
