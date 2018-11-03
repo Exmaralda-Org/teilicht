@@ -22,46 +22,27 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
+import org.jdom2.JDOMException;
 import org.korpora.useful.Anonymize;
+import org.korpora.useful.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import de.ids.mannheim.clarin.mime.MIMETypes;
-import de.ids.mannheim.clarin.teispeech.tools.DocUtilities;
+import de.ids.mannheim.clarin.teispeech.data.GATParser;
 import de.ids.mannheim.clarin.teispeech.tools.LanguageDetect;
 import de.ids.mannheim.clarin.teispeech.tools.TEINormalizer;
 import de.ids.mannheim.clarin.teispeech.tools.TEIPOS;
 import de.ids.mannheim.clarin.teispeech.tools.TextToTEIConversion;
+import de.ids.mannheim.clarin.teispeech.utilities.ServiceUtilities;
 
 @Path("")
 public class OrthoNormal {
 
     private final static Logger LOGGER = LoggerFactory
             .getLogger(OrthoNormal.class.getName());
-
-    private static final String DEFAULT_LANGUAGE = "deu";
-
-    /**
-     * check language parameters
-     *
-     * @param lang
-     *            a String given as a language
-     * @return
-     */
-    private static String checkLanguage(String lang) {
-        if (lang == null) {
-            return DEFAULT_LANGUAGE;
-        }
-        if (!DocUtilities.isLanguage(lang)) {
-            throw new IllegalArgumentException(
-                    String.format("«%s» is not a valid language!", lang));
-        } else {
-            lang = DocUtilities.getLanguage(lang).get();
-        }
-        return lang;
-    }
 
     /**
      * convert to a TEI ISO transcription:
@@ -72,8 +53,6 @@ public class OrthoNormal {
      *            the presumed language, preferably a ISO 639 code
      * @param request
      *            the HTTP request
-     * @param input,
-     *            a TEI-encoded speech transcription
      * @return a TEI-encoded speech transcription with normalization in
      *         &lt;w&gt;
      */
@@ -87,7 +66,7 @@ public class OrthoNormal {
             @QueryParam("lang") String language,
             @Context HttpServletRequest request) {
         try {
-            checkLanguage(language);
+            ServiceUtilities.checkLanguage(language);
             LOGGER.info("Processing <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
@@ -105,16 +84,14 @@ public class OrthoNormal {
     /**
      * normalize using an EXMARaLDA-OrthoNormal-based normalizer:
      *
-     * @param input
-     *            the input document
+     * @param input,
+     *            a TEI-encoded speech transcription
      * @param language
      *            the presumed language, preferably a ISO 639 code
      * @param force
      *            whether to force normalization
      * @param request
      *            the HTTP request
-     * @param input,
-     *            a TEI-encoded speech transcription
      * @return a TEI-encoded speech transcription with normalization in
      *         &lt;w&gt;
      */
@@ -130,13 +107,13 @@ public class OrthoNormal {
             @QueryParam("force") boolean force,
             @Context HttpServletRequest request) {
         try {
-            checkLanguage(language);
+            ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
             DocumentBuilder builder;
-            TEINormalizer teiDictNormalizer = new TEINormalizer(language);
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
+            TEINormalizer teiDictNormalizer = new TEINormalizer(language);
             LOGGER.info("Processing <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
@@ -153,16 +130,14 @@ public class OrthoNormal {
     /**
      * POS-tag a TEI ISO transcription:
      *
-     * @param input
-     *            the input document
+     * @param input,
+     *            a TEI-encoded speech transcription
      * @param language
      *            the presumed language, preferably a ISO 639 code
      * @param force
      *            whether to force normalization
      * @param request
      *            the HTTP request
-     * @param input,
-     *            a TEI-encoded speech transcription
      * @return a TEI-encoded speech transcription with normalization in
      *         &lt;w&gt;
      */
@@ -177,7 +152,7 @@ public class OrthoNormal {
             @QueryParam("force") boolean force,
             @Context HttpServletRequest request) {
         try {
-            checkLanguage(language);
+            ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
             DocumentBuilder builder;
@@ -200,16 +175,16 @@ public class OrthoNormal {
     /**
      * pos-tag a TEI ISO transcription:
      *
-     * @param input
-     *            the input document
+     * @param input,
+     *            a TEI-encoded speech transcription
+     * @param expected
+     *            the languages expected in the document
      * @param language
      *            the presumed language, preferably a ISO 639 code
      * @param force
      *            whether to force normalization
      * @param request
      *            the HTTP request
-     * @param input,
-     *            a TEI-encoded speech transcription
      * @return a TEI-encoded speech transcription with normalization in
      *         &lt;w&gt;
      */
@@ -226,9 +201,10 @@ public class OrthoNormal {
             @QueryParam("force") boolean force,
             @Context HttpServletRequest request) {
         try {
-            checkLanguage(language);
+            ServiceUtilities.checkLanguage(language);
             String[] expectedLangs = expected.stream()
-                    .map(OrthoNormal::checkLanguage).toArray(String[]::new);
+                    .map(ServiceUtilities::checkLanguage)
+                    .toArray(String[]::new);
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
             DocumentBuilder builder;
@@ -248,4 +224,46 @@ public class OrthoNormal {
                     Response.status(400).entity(e.getMessage()).build());
         }
     }
+
+    /**
+     * normalize using an EXMARaLDA-OrthoNormal-based normalizer:
+     *
+     * @param input,
+     *            a TEI-encoded speech transcription
+     * @param language
+     *            the presumed language, preferably a ISO 639 code
+     * @param force
+     *            whether to force normalization
+     * @param picky
+     *            whether to be picky about GAT syntax
+     * @param request
+     *            the HTTP request
+     * @return a TEI-encoded speech transcription with normalization in
+     *         &lt;w&gt;
+     */
+    @POST
+    @Path("segmentize")
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+
+    public Response segmentize(InputStream input,
+            @QueryParam("lang") String language,
+            @QueryParam("force") boolean force,
+            @QueryParam("picky") boolean picky,
+            @Context HttpServletRequest request) {
+        try {
+            ServiceUtilities.checkLanguage(language);
+            org.jdom2.Document doc = Utilities.parseXMLviaJDOM(input);
+            GATParser parser = new GATParser(language, picky);
+            parser.parseDocument(doc, 2);
+            return Response.ok(Utilities.convertJDOMToDOM(doc),
+                    request.getContentType()).build();
+        } catch (IllegalArgumentException | IOException | JDOMException e) {
+            throw new WebApplicationException(e,
+                    Response.status(400).entity(e.getMessage()).build());
+        }
+    }
+
 }
