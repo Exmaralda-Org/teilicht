@@ -4,10 +4,19 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.ids.mannheim.clarin.normalverbraucher</groupId>
   <artifactId>ortho-normal-verbraucher</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>OrthoNormalVerbraucher</name>
   <description>CLARIN Web Service for Normalising transcripts</description>
+  <properties>
+    <!-- project settings -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- plug-in settings -->
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <kotlin.version>1.3.0</kotlin.version>
+    <dependency.locations.enabled>false</dependency.locations.enabled>
+  </properties>
   <build>
     <resources>
       <!-- just to be sure -->
@@ -15,8 +24,11 @@
         <directory>src</directory>
         <includes>
           <include>**/*.xml</include>
+          <include>**/*.bin</include>
           <include>**/*.xsl</include>
           <include>**/*.txt</include>
+          <include>**/*.tsv</include>
+          <include>**/*.json</include>
         </includes>
       </resource>
     </resources>
@@ -24,10 +36,32 @@
     <plugins>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>3.2.2</version>
         <configuration>
           <warSourceDirectory>WebContent</warSourceDirectory>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>javadoc-no-fork</goal>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <failOnError>false</failOnError>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.7.1</version>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -37,13 +71,18 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.9</version>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
     <dependency>
       <groupId>de.ids-mannheim.clarin</groupId>
       <artifactId>teispeechtools</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.sun.jersey</groupId>

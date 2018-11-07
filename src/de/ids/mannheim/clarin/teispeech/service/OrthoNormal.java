@@ -32,10 +32,10 @@ import org.xml.sax.SAXException;
 
 import de.ids.mannheim.clarin.mime.MIMETypes;
 import de.ids.mannheim.clarin.teispeech.data.GATParser;
-import de.ids.mannheim.clarin.teispeech.tools.CLI.Level;
 import de.ids.mannheim.clarin.teispeech.tools.DocUtilities;
 import de.ids.mannheim.clarin.teispeech.tools.GenericParsing;
 import de.ids.mannheim.clarin.teispeech.tools.LanguageDetect;
+import de.ids.mannheim.clarin.teispeech.tools.ProcessingLevel;
 import de.ids.mannheim.clarin.teispeech.tools.TEINormalizer;
 import de.ids.mannheim.clarin.teispeech.tools.TEIPOS;
 import de.ids.mannheim.clarin.teispeech.tools.TextToTEIConversion;
@@ -257,9 +257,9 @@ public class OrthoNormal {
 
     public Response segmentize(InputStream input,
             @QueryParam("lang") String language,
-            @QueryParam("level") Level level,
+            @QueryParam("level") ProcessingLevel level,
             @Context HttpServletRequest request) {
-        if (level == Level.generic) {
+        if (level == ProcessingLevel.generic) {
             try {
                 DocumentBuilderFactory factory = DocumentBuilderFactory
                         .newInstance();

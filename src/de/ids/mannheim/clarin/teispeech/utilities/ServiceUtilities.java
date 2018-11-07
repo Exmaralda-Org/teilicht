@@ -1,6 +1,6 @@
 package de.ids.mannheim.clarin.teispeech.utilities;
 
-import de.ids.mannheim.clarin.teispeech.tools.DocUtilities;
+import org.korpora.useful.LangUtilities;
 
 public class ServiceUtilities {
 
@@ -18,11 +18,11 @@ public class ServiceUtilities {
         if (lang == null) {
             return DEFAULT_LANGUAGE;
         }
-        if (!DocUtilities.isLanguage(lang)) {
+        if (!LangUtilities.isLanguage(lang)) {
             throw new IllegalArgumentException(
                     String.format("«%s» is not a valid language!", lang));
         } else {
-            lang = DocUtilities.getLanguage(lang).get();
+            lang = LangUtilities.getLanguage(lang).get();
         }
         return lang;
     }
