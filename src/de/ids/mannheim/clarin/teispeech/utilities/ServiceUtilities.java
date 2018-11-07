@@ -7,11 +7,12 @@ public class ServiceUtilities {
     private static final String DEFAULT_LANGUAGE = "deu";
 
     /**
-     * check language parameters
+     * check and normalize a language parameter
      *
      * @param lang
      *            a String given as a language
-     * @return
+     * @return the checked and normalized language, German ({@code"deu"}) if
+     *         {@code lang} is null
      */
     public static String checkLanguage(String lang) {
         if (lang == null) {

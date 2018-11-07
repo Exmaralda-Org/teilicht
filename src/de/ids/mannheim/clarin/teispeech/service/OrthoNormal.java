@@ -32,12 +32,21 @@ import org.xml.sax.SAXException;
 
 import de.ids.mannheim.clarin.mime.MIMETypes;
 import de.ids.mannheim.clarin.teispeech.data.GATParser;
+import de.ids.mannheim.clarin.teispeech.tools.CLI.Level;
+import de.ids.mannheim.clarin.teispeech.tools.DocUtilities;
+import de.ids.mannheim.clarin.teispeech.tools.GenericParsing;
 import de.ids.mannheim.clarin.teispeech.tools.LanguageDetect;
 import de.ids.mannheim.clarin.teispeech.tools.TEINormalizer;
 import de.ids.mannheim.clarin.teispeech.tools.TEIPOS;
 import de.ids.mannheim.clarin.teispeech.tools.TextToTEIConversion;
 import de.ids.mannheim.clarin.teispeech.utilities.ServiceUtilities;
 
+/**
+ * Webservices for dealing with TEI-encodded documents
+ *
+ * @author bfi
+ *
+ */
 @Path("")
 public class OrthoNormal {
 
@@ -84,7 +93,7 @@ public class OrthoNormal {
     /**
      * normalize using an EXMARaLDA-OrthoNormal-based normalizer:
      *
-     * @param input,
+     * @param input
      *            a TEI-encoded speech transcription
      * @param language
      *            the presumed language, preferably a ISO 639 code
@@ -130,7 +139,7 @@ public class OrthoNormal {
     /**
      * POS-tag a TEI ISO transcription:
      *
-     * @param input,
+     * @param input
      *            a TEI-encoded speech transcription
      * @param language
      *            the presumed language, preferably a ISO 639 code
@@ -175,7 +184,7 @@ public class OrthoNormal {
     /**
      * pos-tag a TEI ISO transcription:
      *
-     * @param input,
+     * @param input
      *            a TEI-encoded speech transcription
      * @param expected
      *            the languages expected in the document
@@ -228,14 +237,12 @@ public class OrthoNormal {
     /**
      * normalize using an EXMARaLDA-OrthoNormal-based normalizer:
      *
-     * @param input,
+     * @param input
      *            a TEI-encoded speech transcription
      * @param language
      *            the presumed language, preferably a ISO 639 code
-     * @param force
-     *            whether to force normalization
-     * @param picky
-     *            whether to be picky about GAT syntax
+     * @param level
+     *            the parsing level: generic, minimal, basic
      * @param request
      *            the HTTP request
      * @return a TEI-encoded speech transcription with normalization in
@@ -250,19 +257,37 @@ public class OrthoNormal {
 
     public Response segmentize(InputStream input,
             @QueryParam("lang") String language,
-            @QueryParam("force") boolean force,
-            @QueryParam("picky") boolean picky,
+            @QueryParam("level") Level level,
             @Context HttpServletRequest request) {
-        try {
-            ServiceUtilities.checkLanguage(language);
-            org.jdom2.Document doc = Utilities.parseXMLviaJDOM(input);
-            GATParser parser = new GATParser(language, picky);
-            parser.parseDocument(doc, 2);
-            return Response.ok(Utilities.convertJDOMToDOM(doc),
-                    request.getContentType()).build();
-        } catch (IllegalArgumentException | IOException | JDOMException e) {
-            throw new WebApplicationException(e,
-                    Response.status(400).entity(e.getMessage()).build());
+        if (level == Level.generic) {
+            try {
+                DocumentBuilderFactory factory = DocumentBuilderFactory
+                        .newInstance();
+                DocumentBuilder builder;
+                builder = factory.newDocumentBuilder();
+                Document doc = builder.parse(input);
+                GenericParsing.process(doc);
+                return Response.ok(doc, request.getContentType()).build();
+            } catch (SAXException | IOException
+                    | ParserConfigurationException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            try {
+                ServiceUtilities.checkLanguage(language);
+                org.jdom2.Document doc = Utilities.parseXMLviaJDOM(input);
+                // TODO: language?
+                GATParser parser = new GATParser();
+                parser.parseDocument(doc, level.ordinal() + 1);
+                DocUtilities.makeChange(doc, String.format(
+                        "utterances parsed to %s conventions", level.name()));
+                return Response.ok(Utilities.convertJDOMToDOM(doc),
+                        request.getContentType()).build();
+            } catch (IllegalArgumentException | IOException | JDOMException e) {
+                throw new WebApplicationException(e,
+                        Response.status(400).entity(e.getMessage()).build());
+            }
         }
     }
 
