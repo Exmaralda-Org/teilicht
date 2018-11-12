@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 //import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -32,7 +33,9 @@ import org.xml.sax.SAXException;
 
 import de.ids.mannheim.clarin.mime.MIMETypes;
 import de.ids.mannheim.clarin.teispeech.data.GATParser;
+import de.ids.mannheim.clarin.teispeech.tools.DictionaryNormalizer;
 import de.ids.mannheim.clarin.teispeech.tools.DocUtilities;
+import de.ids.mannheim.clarin.teispeech.tools.DocumentIdentifier;
 import de.ids.mannheim.clarin.teispeech.tools.GenericParsing;
 import de.ids.mannheim.clarin.teispeech.tools.LanguageDetect;
 import de.ids.mannheim.clarin.teispeech.tools.ProcessingLevel;
@@ -62,8 +65,7 @@ public class OrthoNormal {
      *            the presumed language, preferably a ISO 639 code
      * @param request
      *            the HTTP request
-     * @return a TEI-encoded speech transcription with normalization in
-     *         &lt;w&gt;
+     * @return a TEI-encoded speech transcription
      */
     @POST
     @Path("text2iso")
@@ -79,7 +81,7 @@ public class OrthoNormal {
             LOGGER.info("Processing <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
-                    Anonymize.anonymizeAddr(request));
+                    Anonymize.anonymizeAddress(request));
             CharStream inputCS;
             inputCS = CharStreams.fromStream(input);
             Document doc = TextToTEIConversion.process(inputCS, language);
@@ -97,6 +99,9 @@ public class OrthoNormal {
      *            a TEI-encoded speech transcription
      * @param language
      *            the presumed language, preferably a ISO 639 code
+     * @param keepCase
+     *            if true, do not convert to lower case when normalizing and
+     *            effectively skip capitalized words
      * @param force
      *            whether to force normalization
      * @param request
@@ -113,6 +118,7 @@ public class OrthoNormal {
 
     public Response normalize(InputStream input,
             @QueryParam("lang") String language,
+            @QueryParam("keep_case") boolean keepCase,
             @QueryParam("force") boolean force,
             @Context HttpServletRequest request) {
         try {
@@ -122,11 +128,13 @@ public class OrthoNormal {
             DocumentBuilder builder;
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
-            TEINormalizer teiDictNormalizer = new TEINormalizer(language);
+            DictionaryNormalizer diNo = new DictionaryNormalizer(keepCase,
+                    false);
+            TEINormalizer teiDictNormalizer = new TEINormalizer(diNo, language);
             LOGGER.info("Processing <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
-                    Anonymize.anonymizeAddr(request));
+                    Anonymize.anonymizeAddress(request));
             teiDictNormalizer.normalize(doc, force);
             return Response.ok(doc, request.getContentType()).build();
         } catch (IllegalArgumentException | SAXException
@@ -147,8 +155,7 @@ public class OrthoNormal {
      *            whether to force normalization
      * @param request
      *            the HTTP request
-     * @return a TEI-encoded speech transcription with normalization in
-     *         &lt;w&gt;
+     * @return a TEI-encoded speech transcription with POS tags
      */
     @POST
     @Path("pos")
@@ -171,7 +178,7 @@ public class OrthoNormal {
             LOGGER.info("Processing <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
-                    Anonymize.anonymizeAddr(request));
+                    Anonymize.anonymizeAddress(request));
             teipo.posTag(force);
             return Response.ok(doc, request.getContentType()).build();
         } catch (IllegalArgumentException | SAXException
@@ -182,7 +189,7 @@ public class OrthoNormal {
     }
 
     /**
-     * pos-tag a TEI ISO transcription:
+     * Detect languages in a a TEI ISO transcription:
      *
      * @param input
      *            a TEI-encoded speech transcription
@@ -192,10 +199,12 @@ public class OrthoNormal {
      *            the presumed language, preferably a ISO 639 code
      * @param force
      *            whether to force normalization
+     * @param minimalLength
+     *            the minimal length of an utterance to attempt language
+     *            detection
      * @param request
      *            the HTTP request
-     * @return a TEI-encoded speech transcription with normalization in
-     *         &lt;w&gt;
+     * @return a TEI-encoded speech transcription with languages detected
      */
     @POST
     @Path("guess")
@@ -208,6 +217,7 @@ public class OrthoNormal {
             @QueryParam("lang") String language,
             @QueryParam("expected") List<String> expected,
             @QueryParam("force") boolean force,
+            @QueryParam("minimal_length") @DefaultValue("5") int minimalLength,
             @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
@@ -220,11 +230,11 @@ public class OrthoNormal {
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
             LanguageDetect guesser = new LanguageDetect(doc, language,
-                    expectedLangs);
+                    expectedLangs, minimalLength);
             LOGGER.info("Processing <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
-                    Anonymize.anonymizeAddr(request));
+                    Anonymize.anonymizeAddress(request));
             guesser.detect(force);
             return Response.ok(doc, request.getContentType()).build();
         } catch (IllegalArgumentException | SAXException
@@ -235,18 +245,15 @@ public class OrthoNormal {
     }
 
     /**
-     * normalize using an EXMARaLDA-OrthoNormal-based normalizer:
+     * segmentize TEI ISO document according to transcription conventions:
      *
      * @param input
      *            a TEI-encoded speech transcription
-     * @param language
-     *            the presumed language, preferably a ISO 639 code
      * @param level
      *            the parsing level: generic, minimal, basic
      * @param request
      *            the HTTP request
-     * @return a TEI-encoded speech transcription with normalization in
-     *         &lt;w&gt;
+     * @return a TEI-encoded speech transcription with annotation parsed
      */
     @POST
     @Path("segmentize")
@@ -256,10 +263,9 @@ public class OrthoNormal {
             MIMETypes.XML })
 
     public Response segmentize(InputStream input,
-            @QueryParam("lang") String language,
             @QueryParam("level") ProcessingLevel level,
             @Context HttpServletRequest request) {
-        if (level == ProcessingLevel.generic) {
+        if (level == ProcessingLevel.generic)
             try {
                 DocumentBuilderFactory factory = DocumentBuilderFactory
                         .newInstance();
@@ -270,14 +276,12 @@ public class OrthoNormal {
                 return Response.ok(doc, request.getContentType()).build();
             } catch (SAXException | IOException
                     | ParserConfigurationException e) {
-                throw new RuntimeException(e);
+                throw new WebApplicationException(e,
+                        Response.status(400).entity(e.getMessage()).build());
             }
-
-        } else {
+        else
             try {
-                ServiceUtilities.checkLanguage(language);
                 org.jdom2.Document doc = Utilities.parseXMLviaJDOM(input);
-                // TODO: language?
                 GATParser parser = new GATParser();
                 parser.parseDocument(doc, level.ordinal() + 1);
                 DocUtilities.makeChange(doc, String.format(
@@ -288,7 +292,79 @@ public class OrthoNormal {
                 throw new WebApplicationException(e,
                         Response.status(400).entity(e.getMessage()).build());
             }
+    }
+
+    /**
+     * add IDs to XML elements for roundtripping
+     *
+     * @param input
+     *            a TEI-encoded speech transcription
+     * @param request
+     *            the HTTP request
+     * @return a TEI-encoded speech transcription with IDs
+     */
+    @POST
+    @Path("identify")
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+
+    public Response identify(InputStream input,
+            @Context HttpServletRequest request) {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory
+                    .newInstance();
+            DocumentBuilder builder;
+            builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(input);
+            DocumentIdentifier.makeIDs(doc);
+            LOGGER.info("Processing <{}> of length {} for {}.",
+                    request.getHeader(HttpHeaders.CONTENT_TYPE),
+                    request.getHeader(HttpHeaders.CONTENT_LENGTH),
+                    Anonymize.anonymizeAddress(request));
+            return Response.ok(doc, request.getContentType()).build();
+        } catch (IllegalArgumentException | SAXException
+                | ParserConfigurationException | IOException e) {
+            throw new WebApplicationException(e,
+                    Response.status(400).entity(e.getMessage()).build());
         }
     }
 
+    /**
+     * remove IDs from XML elements which are only used in roundtripping
+     *
+     * @param input
+     *            a TEI-encoded speech transcription
+     * @param request
+     *            the HTTP request
+     * @return a TEI-encoded speech transcription without IDs
+     */
+    @POST
+    @Path("unidentify")
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+
+    public Response unidentify(InputStream input,
+            @Context HttpServletRequest request) {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory
+                    .newInstance();
+            DocumentBuilder builder;
+            builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(input);
+            DocumentIdentifier.removeIDs(doc);
+            LOGGER.info("Processing <{}> of length {} for {}.",
+                    request.getHeader(HttpHeaders.CONTENT_TYPE),
+                    request.getHeader(HttpHeaders.CONTENT_LENGTH),
+                    Anonymize.anonymizeAddress(request));
+            return Response.ok(doc, request.getContentType()).build();
+        } catch (IllegalArgumentException | SAXException
+                | ParserConfigurationException | IOException e) {
+            throw new WebApplicationException(e,
+                    Response.status(400).entity(e.getMessage()).build());
+        }
+    }
 }
