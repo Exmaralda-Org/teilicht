@@ -44,3 +44,11 @@ accepting/returning the MIME types:
 # Metadata
 
 CMDI-Metadata are in `MetaData/OrthoNormal-metadata.xml`
+
+
+# WADL
+
+The
+[WADL](https://en.wikipedia.org/wiki/Web_Application_Description_Language)
+file is at
+(SERVICE_NAME/services/application.wadl)[SERVICE_NAME/services/application.wadl].
