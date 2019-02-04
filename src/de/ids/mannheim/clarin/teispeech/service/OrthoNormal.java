@@ -125,6 +125,7 @@ public class OrthoNormal {
             ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
+            factory.setNamespaceAware(true);
             DocumentBuilder builder;
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
@@ -171,6 +172,7 @@ public class OrthoNormal {
             ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
+            factory.setNamespaceAware(true);
             DocumentBuilder builder;
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
@@ -226,6 +228,7 @@ public class OrthoNormal {
                     .toArray(String[]::new);
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
+            factory.setNamespaceAware(true);
             DocumentBuilder builder;
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
@@ -269,6 +272,7 @@ public class OrthoNormal {
             try {
                 DocumentBuilderFactory factory = DocumentBuilderFactory
                         .newInstance();
+                factory.setNamespaceAware(true);
                 DocumentBuilder builder;
                 builder = factory.newDocumentBuilder();
                 Document doc = builder.parse(input);
@@ -315,6 +319,7 @@ public class OrthoNormal {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
+            factory.setNamespaceAware(true);
             DocumentBuilder builder;
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
@@ -352,6 +357,7 @@ public class OrthoNormal {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
+            factory.setNamespaceAware(true);
             DocumentBuilder builder;
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
