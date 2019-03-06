@@ -39,17 +39,22 @@ import de.ids.mannheim.clarin.teispeech.tools.DocumentIdentifier;
 import de.ids.mannheim.clarin.teispeech.tools.GenericParsing;
 import de.ids.mannheim.clarin.teispeech.tools.LanguageDetect;
 import de.ids.mannheim.clarin.teispeech.tools.ProcessingLevel;
+import de.ids.mannheim.clarin.teispeech.tools.PseudoAlign;
 import de.ids.mannheim.clarin.teispeech.tools.TEINormalizer;
 import de.ids.mannheim.clarin.teispeech.tools.TEIPOS;
 import de.ids.mannheim.clarin.teispeech.tools.TextToTEIConversion;
 import de.ids.mannheim.clarin.teispeech.utilities.ServiceUtilities;
 
 /**
- * Webservices for dealing with TEI-encodded documents
+ * Webservices for dealing with TEI-encoded documents
  *
  * @author bfi
  *
  */
+
+//@ApplicationPath("OrthoNormalVerbraucher")
+//public class OrthoNormal extends Application {
+
 @Path("")
 public class OrthoNormal {
 
@@ -266,7 +271,7 @@ public class OrthoNormal {
             MIMETypes.XML })
 
     public Response segmentize(InputStream input,
-            @QueryParam("level") ProcessingLevel level,
+            @DefaultValue("generic") @QueryParam("level") ProcessingLevel level,
             @Context HttpServletRequest request) {
         if (level == ProcessingLevel.generic)
             try {
@@ -296,6 +301,61 @@ public class OrthoNormal {
                 throw new WebApplicationException(e,
                         Response.status(400).entity(e.getMessage()).build());
             }
+    }
+
+    /**
+     * Detect languages in a a TEI ISO transcription:
+     *
+     * @param input
+     *            a TEI-encoded speech transcription
+     * @param language
+     *            the presumed language, preferably a ISO 639 code
+     * @param transcribe
+     *            whether to add a phonetic transcription to the utterances if
+     *            possible
+     * @param usePhones
+     *            whether to use (pseudo)phones to determine relative duration
+     *            of words
+     * @param force
+     *            whether to force normalization
+     * @param request
+     *            the HTTP request
+     * @return a TEI-encoded speech transcription with languages detected
+     */
+    @POST
+    @Path("align")
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+
+    public Response align(InputStream input,
+            @QueryParam("lang") String language,
+            @QueryParam("transcribe") boolean transcribe,
+            @QueryParam("use_phones") boolean usePhones,
+            @QueryParam("force") boolean force,
+            @Context HttpServletRequest request) {
+        try {
+            ServiceUtilities.checkLanguage(language);
+            DocumentBuilderFactory factory = DocumentBuilderFactory
+                    .newInstance();
+            factory.setNamespaceAware(true);
+            DocumentBuilder builder;
+            builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(input);
+            PseudoAlign aligner = new PseudoAlign(doc, language, usePhones,
+                    transcribe, force);
+            LOGGER.info("Processing <{}> of length {} for {}.",
+                    request.getHeader(HttpHeaders.CONTENT_TYPE),
+                    request.getHeader(HttpHeaders.CONTENT_LENGTH),
+                    Anonymize.anonymizeAddress(request));
+            aligner.calculateUtterances();
+            return Response.ok(doc, request.getContentType()).build();
+        } catch (IllegalArgumentException | SAXException
+                | ParserConfigurationException | IOException e) {
+            throw new WebApplicationException(e,
+                    Response.status(400).entity(e.getMessage()).build());
+        }
     }
 
     /**
