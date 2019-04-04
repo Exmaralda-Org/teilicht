@@ -2,7 +2,7 @@
   pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-    String title = "IDS Web Services for TEI-encoded Transcriptions of Spoken Language";
+    String title = "TEILicht: IDS Web Services for TEI-encoded Transcriptions of Spoken Language";
 %>
 <html>
 <head>
