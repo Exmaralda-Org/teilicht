@@ -11,7 +11,7 @@ public class ServiceUtilities {
      *
      * @param lang
      *            a String given as a language
-     * @return the checked and normalized language, German ({@code"deu"}) if
+     * @return the checked and normalized language, German ({@code deu}) if
      *         {@code lang} is null
      */
     public static String checkLanguage(String lang) {
@@ -22,6 +22,7 @@ public class ServiceUtilities {
             throw new IllegalArgumentException(
                     String.format("«%s» is not a valid language!", lang));
         } else {
+            //noinspection OptionalGetWithoutIsPresent
             lang = LangUtilities.getLanguage(lang).get();
         }
         return lang;

@@ -320,6 +320,10 @@ public class OrthoNormal {
      *            whether to force normalization
      * @param request
      *            the HTTP request
+     * @param time
+     *            the time length of the conversation in seconds
+     * @param offset
+     *            the time offset in seconds
      * @return a TEI-encoded speech transcription with languages detected
      */
     @POST
