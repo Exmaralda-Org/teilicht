@@ -135,7 +135,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
-      <version>1.7.25</version>
+      <version>1.7.26</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
     <dependency>
@@ -154,9 +154,8 @@
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
-      <version>63.1</version>
+      <version>64.1</version>
     </dependency>
-
     <!-- make OrthoNormalVerbraucher java-9-proof -->
     <dependency>
       <groupId>javax.xml.bind</groupId>
