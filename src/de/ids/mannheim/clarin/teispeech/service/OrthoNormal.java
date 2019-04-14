@@ -1,26 +1,9 @@
 package de.ids.mannheim.clarin.teispeech.service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-//import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-//import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import de.ids.mannheim.clarin.mime.MIMETypes;
+import de.ids.mannheim.clarin.teispeech.data.GATParser;
+import de.ids.mannheim.clarin.teispeech.tools.*;
+import de.ids.mannheim.clarin.teispeech.utilities.ServiceUtilities;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.jdom2.JDOMException;
@@ -31,19 +14,20 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import de.ids.mannheim.clarin.mime.MIMETypes;
-import de.ids.mannheim.clarin.teispeech.data.GATParser;
-import de.ids.mannheim.clarin.teispeech.tools.DictionaryNormalizer;
-import de.ids.mannheim.clarin.teispeech.tools.DocUtilities;
-import de.ids.mannheim.clarin.teispeech.tools.DocumentIdentifier;
-import de.ids.mannheim.clarin.teispeech.tools.GenericParsing;
-import de.ids.mannheim.clarin.teispeech.tools.LanguageDetect;
-import de.ids.mannheim.clarin.teispeech.tools.ProcessingLevel;
-import de.ids.mannheim.clarin.teispeech.tools.PseudoAlign;
-import de.ids.mannheim.clarin.teispeech.tools.TEINormalizer;
-import de.ids.mannheim.clarin.teispeech.tools.TEIPOS;
-import de.ids.mannheim.clarin.teispeech.tools.TextToTEIConversion;
-import de.ids.mannheim.clarin.teispeech.utilities.ServiceUtilities;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+//import javax.ws.rs.GET;
+//import javax.ws.rs.PathParam;
 
 /**
  * Webservices for dealing with TEI-encoded documents
