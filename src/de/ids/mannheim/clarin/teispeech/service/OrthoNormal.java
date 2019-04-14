@@ -334,7 +334,8 @@ public class OrthoNormal {
             @QueryParam("transcribe") boolean transcribe,
             @QueryParam("use_phones") boolean usePhones,
             @QueryParam("force") boolean force,
-            @QueryParam("time") int time,
+            @QueryParam("time") double time,
+            @QueryParam("offset") double offset,
             @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
@@ -345,13 +346,14 @@ public class OrthoNormal {
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
             PseudoAlign aligner = new PseudoAlign(doc, language, usePhones,
-                    transcribe, force, time);
+                    transcribe, force, time, offset);
             LOGGER.info("Processing <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
                     Anonymize.anonymizeAddress(request));
             aligner.calculateUtterances();
-            return Response.ok(doc, request.getContentType()).build();
+            return Response.ok(aligner.getDoc(),
+                    request.getContentType()).build();
         } catch (IllegalArgumentException | SAXException
                 | ParserConfigurationException | IOException e) {
             throw new WebApplicationException(e,
