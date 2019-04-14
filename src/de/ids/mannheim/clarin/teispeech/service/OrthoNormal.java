@@ -1,9 +1,12 @@
 package de.ids.mannheim.clarin.teispeech.service;
 
 import de.ids.mannheim.clarin.mime.MIMETypes;
+import de.ids.mannheim.clarin.teispeech.data.DocUtilities;
 import de.ids.mannheim.clarin.teispeech.data.GATParser;
-import de.ids.mannheim.clarin.teispeech.tools.*;
+import de.ids.mannheim.clarin.teispeech.data.LanguageDetect;
+import de.ids.mannheim.clarin.teispeech.tools.ProcessingLevel;
 import de.ids.mannheim.clarin.teispeech.utilities.ServiceUtilities;
+import de.ids.mannheim.clarin.teispeech.workflow.*;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.jdom2.JDOMException;
@@ -33,7 +36,6 @@ import java.util.List;
  * Webservices for dealing with TEI-encoded documents
  *
  * @author bfi
- *
  */
 
 //@ApplicationPath("OrthoNormalVerbraucher")
@@ -49,22 +51,22 @@ public class OrthoNormal {
      * convert to a TEI ISO transcription:
      *
      * @param input
-     *            the input document – plain text!
+     *         the input document – plain text!
      * @param language
-     *            the presumed language, preferably a ISO 639 code
+     *         the presumed language, preferably a ISO 639 code
      * @param request
-     *            the HTTP request
+     *         the HTTP request
      * @return a TEI-encoded speech transcription
      */
     @POST
     @Path("text2iso")
-    @Consumes({ MIMETypes.PLAIN_TEXT })
-    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
+    @Consumes({MIMETypes.PLAIN_TEXT})
+    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
 
     public Response text2iso(InputStream input,
-            @QueryParam("lang") String language,
-            @Context HttpServletRequest request) {
+                             @QueryParam("lang") String language,
+                             @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
             LOGGER.info("Processing <{}> of length {} for {}.",
@@ -85,31 +87,31 @@ public class OrthoNormal {
      * normalize using an EXMARaLDA-OrthoNormal-based normalizer:
      *
      * @param input
-     *            a TEI-encoded speech transcription
+     *         a TEI-encoded speech transcription
      * @param language
-     *            the presumed language, preferably a ISO 639 code
+     *         the presumed language, preferably a ISO 639 code
      * @param keepCase
-     *            if true, do not convert to lower case when normalizing and
-     *            effectively skip capitalized words
+     *         if true, do not convert to lower case when normalizing and
+     *         effectively skip capitalized words
      * @param force
-     *            whether to force normalization
+     *         whether to force normalization
      * @param request
-     *            the HTTP request
+     *         the HTTP request
      * @return a TEI-encoded speech transcription with normalization in
-     *         &lt;w&gt;
+     * &lt;w&gt;
      */
     @POST
     @Path("normalize")
-    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
-    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
+    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
+    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
 
     public Response normalize(InputStream input,
-            @QueryParam("lang") String language,
-            @QueryParam("keep_case") boolean keepCase,
-            @QueryParam("force") boolean force,
-            @Context HttpServletRequest request) {
+                              @QueryParam("lang") String language,
+                              @QueryParam("keep_case") boolean keepCase,
+                              @QueryParam("force") boolean force,
+                              @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -138,25 +140,25 @@ public class OrthoNormal {
      * POS-tag a TEI ISO transcription:
      *
      * @param input
-     *            a TEI-encoded speech transcription
+     *         a TEI-encoded speech transcription
      * @param language
-     *            the presumed language, preferably a ISO 639 code
+     *         the presumed language, preferably a ISO 639 code
      * @param force
-     *            whether to force normalization
+     *         whether to force normalization
      * @param request
-     *            the HTTP request
+     *         the HTTP request
      * @return a TEI-encoded speech transcription with POS tags
      */
     @POST
     @Path("pos")
-    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
-    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
+    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
+    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
 
     public Response pos(InputStream input, @QueryParam("lang") String language,
-            @QueryParam("force") boolean force,
-            @Context HttpServletRequest request) {
+                        @QueryParam("force") boolean force,
+                        @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -183,33 +185,33 @@ public class OrthoNormal {
      * Detect languages in a a TEI ISO transcription:
      *
      * @param input
-     *            a TEI-encoded speech transcription
+     *         a TEI-encoded speech transcription
      * @param expected
-     *            the languages expected in the document
+     *         the languages expected in the document
      * @param language
-     *            the presumed language, preferably a ISO 639 code
+     *         the presumed language, preferably a ISO 639 code
      * @param force
-     *            whether to force normalization
+     *         whether to force normalization
      * @param minimalLength
-     *            the minimal length of an utterance to attempt language
-     *            detection
+     *         the minimal length of an utterance to attempt language
+     *         detection
      * @param request
-     *            the HTTP request
+     *         the HTTP request
      * @return a TEI-encoded speech transcription with languages detected
      */
     @POST
     @Path("guess")
-    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
-    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
+    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
+    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
 
     public Response guess(InputStream input,
-            @QueryParam("lang") String language,
-            @QueryParam("expected") List<String> expected,
-            @QueryParam("force") boolean force,
-            @QueryParam("minimal_length") @DefaultValue("5") int minimalLength,
-            @Context HttpServletRequest request) {
+                          @QueryParam("lang") String language,
+                          @QueryParam("expected") List<String> expected,
+                          @QueryParam("force") boolean force,
+                          @QueryParam("minimal_length") @DefaultValue("5") int minimalLength,
+                          @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
             String[] expectedLangs = expected.stream()
@@ -240,23 +242,23 @@ public class OrthoNormal {
      * segmentize TEI ISO document according to transcription conventions:
      *
      * @param input
-     *            a TEI-encoded speech transcription
+     *         a TEI-encoded speech transcription
      * @param level
-     *            the parsing level: generic, minimal, basic
+     *         the parsing level: generic, minimal, basic
      * @param request
-     *            the HTTP request
+     *         the HTTP request
      * @return a TEI-encoded speech transcription with annotation parsed
      */
     @POST
     @Path("segmentize")
-    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
-    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
+    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
+    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
 
     public Response segmentize(InputStream input,
-            @DefaultValue("generic") @QueryParam("level") ProcessingLevel level,
-            @Context HttpServletRequest request) {
+                               @DefaultValue("generic") @QueryParam("level") ProcessingLevel level,
+                               @Context HttpServletRequest request) {
         if (level == ProcessingLevel.generic)
             try {
                 DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -291,40 +293,40 @@ public class OrthoNormal {
      * Detect languages in a a TEI ISO transcription:
      *
      * @param input
-     *            a TEI-encoded speech transcription
+     *         a TEI-encoded speech transcription
      * @param language
-     *            the presumed language, preferably a ISO 639 code
+     *         the presumed language, preferably a ISO 639 code
      * @param transcribe
-     *            whether to add a phonetic transcription to the utterances if
-     *            possible
+     *         whether to add a phonetic transcription to the utterances if
+     *         possible
      * @param usePhones
-     *            whether to use (pseudo)phones to determine relative duration
-     *            of words
+     *         whether to use (pseudo)phones to determine relative duration
+     *         of words
      * @param force
-     *            whether to force normalization
+     *         whether to force normalization
      * @param request
-     *            the HTTP request
+     *         the HTTP request
      * @param time
-     *            the time length of the conversation in seconds
+     *         the time length of the conversation in seconds
      * @param offset
-     *            the time offset in seconds
+     *         the time offset in seconds
      * @return a TEI-encoded speech transcription with languages detected
      */
     @POST
     @Path("align")
-    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
-    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
+    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
+    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
 
     public Response align(InputStream input,
-            @QueryParam("lang") String language,
-            @QueryParam("transcribe") boolean transcribe,
-            @QueryParam("use_phones") boolean usePhones,
-            @QueryParam("force") boolean force,
-            @QueryParam("time") double time,
-            @QueryParam("offset") double offset,
-            @Context HttpServletRequest request) {
+                          @QueryParam("lang") String language,
+                          @QueryParam("transcribe") boolean transcribe,
+                          @QueryParam("use_phones") boolean usePhones,
+                          @QueryParam("force") boolean force,
+                          @QueryParam("time") double time,
+                          @QueryParam("offset") double offset,
+                          @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -353,20 +355,20 @@ public class OrthoNormal {
      * add IDs to XML elements for roundtripping
      *
      * @param input
-     *            a TEI-encoded speech transcription
+     *         a TEI-encoded speech transcription
      * @param request
-     *            the HTTP request
+     *         the HTTP request
      * @return a TEI-encoded speech transcription with IDs
      */
     @POST
     @Path("identify")
-    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
-    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
+    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
+    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
 
     public Response identify(InputStream input,
-            @Context HttpServletRequest request) {
+                             @Context HttpServletRequest request) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
@@ -391,20 +393,20 @@ public class OrthoNormal {
      * remove IDs from XML elements which are only used in roundtripping
      *
      * @param input
-     *            a TEI-encoded speech transcription
+     *         a TEI-encoded speech transcription
      * @param request
-     *            the HTTP request
+     *         the HTTP request
      * @return a TEI-encoded speech transcription without IDs
      */
     @POST
     @Path("unidentify")
-    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
-    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
+    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
+    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML})
 
     public Response unidentify(InputStream input,
-            @Context HttpServletRequest request) {
+                               @Context HttpServletRequest request) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
