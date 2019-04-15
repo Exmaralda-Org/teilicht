@@ -326,6 +326,7 @@ public class OrthoNormal {
                           @QueryParam("force") boolean force,
                           @QueryParam("time") double time,
                           @QueryParam("offset") double offset,
+                          @QueryParam("every") int every,
                           @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
@@ -336,7 +337,7 @@ public class OrthoNormal {
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
             PseudoAlign aligner = new PseudoAlign(doc, language, usePhones,
-                    transcribe, force, time, offset);
+                    transcribe, force, time, offset, every);
             LOGGER.info("Processing <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
