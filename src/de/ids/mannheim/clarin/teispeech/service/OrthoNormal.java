@@ -310,6 +310,8 @@ public class OrthoNormal {
      *         the time length of the conversation in seconds
      * @param offset
      *         the time offset in seconds
+     * @param every
+     *         number of items after which to insert an orientation anchor
      * @return a TEI-encoded speech transcription with languages detected
      */
     @POST
