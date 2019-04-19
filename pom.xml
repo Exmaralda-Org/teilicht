@@ -7,8 +7,8 @@
   <artifactId>teilicht</artifactId>
   <version>0.0.3</version>
   <packaging>war</packaging>
-  <name>OrthoNormalVerbraucher</name>
-  <description>CLARIN Web Service for Normalising transcripts</description>
+  <name>TEILicht</name>
+  <description>CLARIN Web Service for treating transcripts</description>
   <properties>
     <!-- project settings -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -156,8 +156,8 @@
       <artifactId>icu4j</artifactId>
       <version>64.1</version>
     </dependency>
-    <!-- make OrthoNormalVerbraucher java-9-proof -->
-    <dependency>
+    <!-- make TEILicht java-9+-proof – TODO: seems redundant now?-->
+    <!--dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
       <version>2.3.1</version>
@@ -176,6 +176,6 @@
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
       <version>1.1.1</version>
-    </dependency>
+    </dependency-->
   </dependencies>
 </project>
