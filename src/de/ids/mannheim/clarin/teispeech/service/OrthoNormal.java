@@ -29,8 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-//import javax.ws.rs.GET;
-//import javax.ws.rs.PathParam;
 
 /**
  * Webservices for dealing with TEI-encoded documents
@@ -38,14 +36,12 @@ import java.util.List;
  * @author bfi
  */
 
-//@ApplicationPath("OrthoNormalVerbraucher")
-//public class OrthoNormal extends Application {
 
 @Path("")
-public class OrthoNormal {
+public class TEILicht {
 
     private final static Logger LOGGER = LoggerFactory
-            .getLogger(OrthoNormal.class.getName());
+            .getLogger(TEILicht.class.getName());
 
     /**
      * convert to a TEI ISO transcription:
