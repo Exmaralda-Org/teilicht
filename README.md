@@ -41,11 +41,6 @@ accepting/returning the MIME types:
 - `application/xml`
 
 
-# Metadata
-
-CMDI-Metadata are in `MetaData/OrthoNormal-metadata.xml`
-
-
 # WADL
 
 The
