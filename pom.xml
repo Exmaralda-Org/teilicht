@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.ids.mannheim.clarin.teilicht</groupId>
   <artifactId>teilicht</artifactId>
-  <version>0.0.3</version>
+  <version>0.2</version>
   <packaging>war</packaging>
   <name>TEILicht</name>
   <description>CLARIN Web Service for treating transcripts</description>
@@ -100,7 +100,7 @@
     <dependency>
       <groupId>de.ids-mannheim.clarin</groupId>
       <artifactId>teispeechtools</artifactId>
-      <version>0.3</version>
+      <version>0.4</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.inject</groupId>
