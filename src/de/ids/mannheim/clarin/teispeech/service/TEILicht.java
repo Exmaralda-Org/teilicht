@@ -213,6 +213,9 @@ public class TEILicht {
             String[] expectedLangs = expected.stream()
                     .map(ServiceUtilities::checkLanguage)
                     .toArray(String[]::new);
+            if (expectedLangs.length == 1){
+                expectedLangs = expectedLangs[0].split("[, ]");
+            }
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
             factory.setNamespaceAware(true);
