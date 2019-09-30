@@ -322,11 +322,11 @@ public class TEILicht {
 
     public Response align(InputStream input,
                           @QueryParam("lang") String language,
-                          @QueryParam("transcribe") boolean transcribe,
-                          @QueryParam("use_phones") boolean usePhones,
+                          @QueryParam("transcribe") @DefaultValue("true") boolean transcribe,
+                          @QueryParam("use_phones") @DefaultValue("true") boolean usePhones,
                           @QueryParam("force") boolean force,
                           @QueryParam("time") double time,
-                          @QueryParam("offset") double offset,
+                          @QueryParam("offset")  @DefaultValue("5") double offset,
                           @QueryParam("every") int every,
                           @Context HttpServletRequest request) {
         try {
