@@ -40,13 +40,13 @@
               <cmd:Contact>
                 <cmd:Person>Bernhard Fisseni</cmd:Person>
                 <cmd:Email>fisseni@ids-mannheim.de</cmd:Email>
-                <cmd:Organisation>IDS: Institut für Deutsche Sprache</cmd:Organisation>
+                <cmd:Organisation>IDS: Leibniz-Institut für Deutsche Sprache</cmd:Organisation>
                 <cmd:Url>http://www.ids-mannheim.de</cmd:Url>
               </cmd:Contact>
               <cmd:Contact>
                 <cmd:Person>Thomas Schmidt</cmd:Person>
                 <cmd:Email>thomas.schmidt@ids-mannheim.de</cmd:Email>
-                <cmd:Organisation>IDS: Institut für Deutsche Sprache</cmd:Organisation>
+                <cmd:Organisation>IDS: Leibniz-Institut für Deutsche Sprache</cmd:Organisation>
                 <cmd:Url>http://www.ids-mannheim.de</cmd:Url>
               </cmd:Contact>
             </cmd:Creator>

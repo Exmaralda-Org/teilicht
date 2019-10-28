@@ -22,7 +22,7 @@
     <cmd:WebLichtWebService>
       <cmd:Service>
         <cmd:Name>ISO/TEI Spoken Transcript converter</cmd:Name>
-        <cmd:Description>This service converts Plain Text to ISO-24624:2016(E)-TEI-annotated texts; the format is defined ad https://github.com/Exmaralda-Org/teispeechtools/blob/master/doc/Simple-EXMARaLDA.md.
+        <cmd:Description>This service converts Plain Text to ISO-24624:2016(E)-TEI-annotated texts; the format is defined at https://github.com/Exmaralda-Org/teispeechtools/blob/master/doc/Simple-EXMARaLDA.md.
 
 A `lang` parameter can be given, and its value is assigned to the @lang attribute of the TEI body.  Note that this service does not in any check whether the language value is acceptable.</cmd:Description>
         <cmd:Description type="short">TEILicht: Plain text to ISO 24624:2016(E) conversion (first step)</cmd:Description>
@@ -42,13 +42,13 @@ A `lang` parameter can be given, and its value is assigned to the @lang attribut
               <cmd:Contact>
                 <cmd:Person>Bernhard Fisseni</cmd:Person>
                 <cmd:Email>fisseni@ids-mannheim.de</cmd:Email>
-                <cmd:Organisation>IDS: Institut für Deutsche Sprache</cmd:Organisation>
+                <cmd:Organisation>IDS: Leibniz-Institut für Deutsche Sprache</cmd:Organisation>
                 <cmd:Url>http://www.ids-mannheim.de</cmd:Url>
               </cmd:Contact>
               <cmd:Contact>
                 <cmd:Person>Thomas Schmidt</cmd:Person>
                 <cmd:Email>thomas.schmidt@ids-mannheim.de</cmd:Email>
-                <cmd:Organisation>IDS: Institut für Deutsche Sprache</cmd:Organisation>
+                <cmd:Organisation>IDS: Leibniz-Institut für Deutsche Sprache</cmd:Organisation>
                 <cmd:Url>http://www.ids-mannheim.de</cmd:Url>
               </cmd:Contact>
             </cmd:Creator>
