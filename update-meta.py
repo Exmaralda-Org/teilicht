@@ -35,7 +35,7 @@ for fil in (LANGUAGES_639_1, LANGUAGES_639_2):
     LANGUAGE_TAGS.update(fil.read_text("UTF_8").split())
 with LANGUAGES_639_3.open(encoding="UTF-8") as fil:
     LANGUAGE_TAGS.update(r["Id"] for r in DictReader(fil, dialect=excel_tab))
-print(LANGUAGE_TAGS)
+# print(LANGUAGE_TAGS)
 
 
 def create_lang(code):
@@ -97,4 +97,4 @@ for xml_file in sys.argv[1:]:
         fix_creators(meta_tree)
         with open(make_new_name(xml_file), "w", encoding="UTF-8") as out_file:
             out_file.write(etree.tounicode(meta_tree))
-        print(etree.tounicode(meta_tree))
+        # print(etree.tounicode(meta_tree))
