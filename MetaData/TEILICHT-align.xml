@@ -3,7 +3,7 @@
   <ns2:Header>
     <ns2:MdCreator>IDS</ns2:MdCreator>
     <ns2:MdCreationDate>2018-10-11</ns2:MdCreationDate>
-    <ns2:MdSelfLink>TEILicht.align</ns2:MdSelfLink>
+    <ns2:MdSelfLink>http://hdl.handle.net/10932/00-047E-2B7F-A7FA-1F01-7</ns2:MdSelfLink>
     <ns2:MdProfile>clarin.eu:cr1:p_1320657629644</ns2:MdProfile>
     <ns2:MdCollectionDisplayName>IDS CLARIN Webservices
     </ns2:MdCollectionDisplayName>
@@ -59,7 +59,7 @@
                     <cmd:AllowManualSelectionFallback>false</cmd:AllowManualSelectionFallback>
                     <cmd:Values>
                       <cmd:ParameterValue>
-                        <cmd:Value>text/plain</cmd:Value>
+                        <cmd:Value>application/tei+xml;format-variant=tei-iso-spoken</cmd:Value>
                       </cmd:ParameterValue>
                     </cmd:Values>
                   </cmd:Parameter>
