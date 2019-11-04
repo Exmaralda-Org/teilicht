@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-import json
-import re
 import sys
 import pathlib
 from csv import DictReader, excel_tab
@@ -8,7 +6,7 @@ from collections import namedtuple
 
 from lxml import etree
 
-Person = namedtuple("Person", ["name", "mail", "orga", "url"])
+Person = namedtuple("Person", ["name", "mail", "org", "url"])
 
 IDS_MAIL = "{}@ids-mannheim.de"
 IDS = "Leibniz-Institut für Deutsche Sprache"
@@ -16,7 +14,8 @@ IDS_URL = "http://www.ids-mannheim.de"
 
 PEOPLE = (
     Person("Bernhard Fisseni", IDS_MAIL.format("fisseni"), IDS, IDS_URL),
-    Person("Bernhard Fisseni", IDS_MAIL.format("thomas.schmidt"), IDS, IDS_URL))
+    Person("Bernhard Fisseni", IDS_MAIL.format("thomas.schmidt"), IDS, IDS_URL)
+)
 
 XML_PARSER = etree.XMLParser(
     # dtd_validation=False,
@@ -73,7 +72,7 @@ def create_creator(person):
     contact = etree.SubElement(root, f"{{{NAMESPACE}}}Contact")
     etree.SubElement(contact, f"{{{NAMESPACE}}}Person").text = person.name
     etree.SubElement(contact, f"{{{NAMESPACE}}}Email").text = person.mail
-    etree.SubElement(contact, f"{{{NAMESPACE}}}Organisation").text = person.orga
+    etree.SubElement(contact, f"{{{NAMESPACE}}}Organisation").text = person.org
     etree.SubElement(contact, f"{{{NAMESPACE}}}Url").text = person.url
     return root
 
