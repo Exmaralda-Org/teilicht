@@ -14,7 +14,7 @@ IDS_URL = "http://www.ids-mannheim.de"
 
 PEOPLE = (
     Person("Bernhard Fisseni", IDS_MAIL.format("fisseni"), IDS, IDS_URL),
-    Person("Bernhard Fisseni", IDS_MAIL.format("thomas.schmidt"), IDS, IDS_URL)
+    Person("Thomas Schmidt", IDS_MAIL.format("thomas.schmidt"), IDS, IDS_URL)
 )
 
 XML_PARSER = etree.XMLParser(
@@ -64,7 +64,7 @@ def fix_langs(root):
     else:
         lang_par = lang_par[0]
     vals = get_values_empty(lang_par)
-    vals.extend(create_lang(c) for c in LANGUAGE_TAGS)
+    vals.extend(create_lang(c) for c in sorted(LANGUAGE_TAGS))
 
 
 def create_creator(person):
