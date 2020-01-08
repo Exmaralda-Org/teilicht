@@ -96,5 +96,5 @@ for xml_file in sys.argv[1:]:
         fix_langs(meta_tree)
         fix_creators(meta_tree)
         with open(make_new_name(xml_file), "w", encoding="UTF-8") as out_file:
-            out_file.write(etree.tounicode(meta_tree))
+            out_file.write(etree.tounicode(meta_tree, pretty_print=True))
         # print(etree.tounicode(meta_tree))

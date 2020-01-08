@@ -8,9 +8,11 @@ title: Normalization services for TEI XML files
 This is a WEB service for applying orthographic normalization, mainly to transcripts 
 of spoken data in [TEI](http://www.tei-c.org/release/doc/tei-p5-doc/en/html/TS.html)
 
-It basically searches for `<w>` elements and applies normalization to their
-[text content](https://www.w3schools.com/xml/prop_element_textcontent.asp). 
-
+It uses the functionality provided by the
+[TEI Speech Tools library](https://github.com/Exmaralda-Org/teispeechtools);
+for the documentation of services and parameters, see [there](https://github.com/Exmaralda-Org/teispeechtools).
+A [running instance](https://clarin.ids-mannheim.de/teilicht) is provided by the
+[Leibniz Institute for the German Language](https://www.ids-mannheim.de).
 
 # Compilation
 
