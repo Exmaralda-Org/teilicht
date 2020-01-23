@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.ids.mannheim.clarin.teilicht</groupId>
   <artifactId>teilicht</artifactId>
-  <version>0.3.4</version>
+  <version>0.4.0</version>
   <packaging>war</packaging>
   <name>TEILicht</name>
   <description>CLARIN Web Service for treating transcripts</description>
