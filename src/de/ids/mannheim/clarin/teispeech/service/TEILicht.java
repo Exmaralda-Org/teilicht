@@ -9,6 +9,7 @@ import de.ids.mannheim.clarin.teispeech.utilities.ServiceUtilities;
 import de.ids.mannheim.clarin.teispeech.workflow.*;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
+import org.apache.http.entity.mime.MIME;
 import org.jdom2.JDOMException;
 import org.korpora.useful.Anonymize;
 import org.korpora.useful.Utilities;
@@ -27,7 +28,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -56,7 +59,7 @@ public class TEILicht {
      */
     @POST
     @Path("text2iso")
-    @Consumes({MIMETypes.PLAIN_TEXT})
+    @Consumes({MIMETypes.PLAIN_TEXT, MIMETypes.SIMPLE_EXMARALDA})
     @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
             MIMETypes.XML})
 
@@ -205,16 +208,26 @@ public class TEILicht {
     public Response guess(InputStream input,
                           @QueryParam("lang") String language,
                           @QueryParam("expected") List<String> expected,
+                          @QueryParam("expected1") String expected1,
+                          @QueryParam("expected2") String expected2,
+                          @QueryParam("expected3") String expected3,
+                          @QueryParam("expected4") String expected4,
+                          @QueryParam("expected5") String expected5,
                           @QueryParam("force") boolean force,
                           @QueryParam("minimal_length") @DefaultValue("5") int minimalLength,
                           @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
-            String[] expectedLangs = expected.stream()
+            List<String> expectedLangs = expected.stream()
                     .map(ServiceUtilities::checkLanguage)
-                    .toArray(String[]::new);
-            if (expectedLangs.length == 1){
-                expectedLangs = expectedLangs[0].split("[, ]");
+                    .collect(Collectors.toList());
+            if (expectedLangs.size() == 1){
+                expectedLangs = Arrays.asList(expectedLangs.get(0).split("[, ]"));
+            }
+            for (String l: new String[] {
+                    expected1, expected2, expected3, expected4, expected5}) {
+                if (l != null)
+                    expectedLangs.add(l);
             }
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
@@ -325,9 +338,9 @@ public class TEILicht {
                           @QueryParam("transcribe") @DefaultValue("true") boolean transcribe,
                           @QueryParam("use_phones") @DefaultValue("true") boolean usePhones,
                           @QueryParam("force") boolean force,
-                          @QueryParam("time") double time,
-                          @QueryParam("offset")  @DefaultValue("5") double offset,
-                          @QueryParam("every") int every,
+                          @QueryParam("time") @DefaultValue("-1.0") double time,
+                          @QueryParam("offset")  @DefaultValue("-1.0") double offset,
+                          @QueryParam("every") @DefaultValue("5") int every,
                           @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);

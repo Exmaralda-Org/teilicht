@@ -32,4 +32,9 @@ public class MIMETypes {
      * the only REAL text
      */
     public final static String PLAIN_TEXT = "text/plain";
+
+    /**
+     * Simple Exmaralda format (for WebLicht), see <a href="https://github.com/Exmaralda-Org/teispeechtools/blob/master/doc/Simple-EXMARaLDA.md">Specification</a>
+     */
+    public static final String SIMPLE_EXMARALDA = "text/exmaralda-simple";
 }
