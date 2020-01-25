@@ -1,15 +1,28 @@
 package de.ids.mannheim.clarin.teispeech.service;
 
-import de.ids.mannheim.clarin.mime.MIMETypes;
-import de.ids.mannheim.clarin.teispeech.data.DocUtilities;
-import de.ids.mannheim.clarin.teispeech.data.GATParser;
-import de.ids.mannheim.clarin.teispeech.data.LanguageDetect;
-import de.ids.mannheim.clarin.teispeech.tools.ProcessingLevel;
-import de.ids.mannheim.clarin.teispeech.utilities.ServiceUtilities;
-import de.ids.mannheim.clarin.teispeech.workflow.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
-import org.apache.http.entity.mime.MIME;
 import org.jdom2.JDOMException;
 import org.korpora.useful.Anonymize;
 import org.korpora.useful.Utilities;
@@ -18,27 +31,25 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import de.ids.mannheim.clarin.mime.MIMETypes;
+import de.ids.mannheim.clarin.teispeech.data.DocUtilities;
+import de.ids.mannheim.clarin.teispeech.data.GATParser;
+import de.ids.mannheim.clarin.teispeech.data.LanguageDetect;
+import de.ids.mannheim.clarin.teispeech.tools.ProcessingLevel;
+import de.ids.mannheim.clarin.teispeech.utilities.ServiceUtilities;
+import de.ids.mannheim.clarin.teispeech.workflow.DictionaryNormalizer;
+import de.ids.mannheim.clarin.teispeech.workflow.DocumentIdentifier;
+import de.ids.mannheim.clarin.teispeech.workflow.GenericParsing;
+import de.ids.mannheim.clarin.teispeech.workflow.PseudoAlign;
+import de.ids.mannheim.clarin.teispeech.workflow.TEINormalizer;
+import de.ids.mannheim.clarin.teispeech.workflow.TEIPOS;
+import de.ids.mannheim.clarin.teispeech.workflow.TextToTEIConversion;
 
 /**
  * Webservices for dealing with TEI-encoded documents
  *
  * @author bfi
  */
-
 
 @Path("")
 public class TEILicht {
@@ -50,22 +61,22 @@ public class TEILicht {
      * convert to a TEI ISO transcription:
      *
      * @param input
-     *         the input document – plain text!
+     *     the input document – plain text!
      * @param language
-     *         the presumed language, preferably a ISO 639 code
+     *     the presumed language, preferably a ISO 639 code
      * @param request
-     *         the HTTP request
+     *     the HTTP request
      * @return a TEI-encoded speech transcription
      */
     @POST
     @Path("text2iso")
-    @Consumes({MIMETypes.PLAIN_TEXT, MIMETypes.SIMPLE_EXMARALDA})
-    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
+    @Consumes({ MIMETypes.PLAIN_TEXT, MIMETypes.SIMPLE_EXMARALDA })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
 
     public Response text2iso(InputStream input,
-                             @QueryParam("lang") String language,
-                             @Context HttpServletRequest request) {
+            @QueryParam("lang") String language,
+            @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
             LOGGER.info("Processing <{}> of length {} for {}.",
@@ -86,31 +97,31 @@ public class TEILicht {
      * normalize using an EXMARaLDA-OrthoNormal-based normalizer:
      *
      * @param input
-     *         a TEI-encoded speech transcription
+     *     a TEI-encoded speech transcription
      * @param language
-     *         the presumed language, preferably a ISO 639 code
+     *     the presumed language, preferably a ISO 639 code
      * @param keepCase
-     *         if true, do not convert to lower case when normalizing and
-     *         effectively skip capitalized words
+     *     if true, do not convert to lower case when normalizing and
+     *     effectively skip capitalized words
      * @param force
-     *         whether to force normalization
+     *     whether to force normalization
      * @param request
-     *         the HTTP request
+     *     the HTTP request
      * @return a TEI-encoded speech transcription with normalization in
      * &lt;w&gt;
      */
     @POST
     @Path("normalize")
-    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
-    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
 
     public Response normalize(InputStream input,
-                              @QueryParam("lang") String language,
-                              @QueryParam("keep_case") boolean keepCase,
-                              @QueryParam("force") boolean force,
-                              @Context HttpServletRequest request) {
+            @QueryParam("lang") String language,
+            @QueryParam("keep_case") boolean keepCase,
+            @QueryParam("force") boolean force,
+            @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -139,25 +150,25 @@ public class TEILicht {
      * POS-tag a TEI ISO transcription:
      *
      * @param input
-     *         a TEI-encoded speech transcription
+     *     a TEI-encoded speech transcription
      * @param language
-     *         the presumed language, preferably a ISO 639 code
+     *     the presumed language, preferably a ISO 639 code
      * @param force
-     *         whether to force normalization
+     *     whether to force normalization
      * @param request
-     *         the HTTP request
+     *     the HTTP request
      * @return a TEI-encoded speech transcription with POS tags
      */
     @POST
     @Path("pos")
-    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
-    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
 
     public Response pos(InputStream input, @QueryParam("lang") String language,
-                        @QueryParam("force") boolean force,
-                        @Context HttpServletRequest request) {
+            @QueryParam("force") boolean force,
+            @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -184,48 +195,58 @@ public class TEILicht {
      * Detect languages in a a TEI ISO transcription:
      *
      * @param input
-     *         a TEI-encoded speech transcription
+     *     a TEI-encoded speech transcription
      * @param expected
-     *         the languages expected in the document
+     *     the languages expected in the document
+     * @param expected1
+     *     expected language 1, as WebLicht can't handle lists
+     * @param expected2
+     *     expected language 2, as WebLicht can't handle lists
+     * @param expected3
+     *     expected language 3, as WebLicht can't handle lists
+     * @param expected4
+     *     expected language 4, as WebLicht can't handle lists
+     * @param expected5
+     *     expected language 5, as WebLicht can't handle lists
      * @param language
-     *         the presumed language, preferably a ISO 639 code
+     *     the presumed language, preferably a ISO 639 code
      * @param force
-     *         whether to force normalization
+     *     whether to force normalization
      * @param minimalLength
-     *         the minimal length of an utterance to attempt language
-     *         detection
+     *     the minimal length of an utterance to attempt language detection
      * @param request
-     *         the HTTP request
+     *     the HTTP request
      * @return a TEI-encoded speech transcription with languages detected
      */
     @POST
     @Path("guess")
-    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
-    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
 
     public Response guess(InputStream input,
-                          @QueryParam("lang") String language,
-                          @QueryParam("expected") List<String> expected,
-                          @QueryParam("expected1") String expected1,
-                          @QueryParam("expected2") String expected2,
-                          @QueryParam("expected3") String expected3,
-                          @QueryParam("expected4") String expected4,
-                          @QueryParam("expected5") String expected5,
-                          @QueryParam("force") boolean force,
-                          @QueryParam("minimal_length") @DefaultValue("5") int minimalLength,
-                          @Context HttpServletRequest request) {
+            @QueryParam("lang") String language,
+            @QueryParam("expected") List<String> expected,
+            @QueryParam("expected1") String expected1,
+            @QueryParam("expected2") String expected2,
+            @QueryParam("expected3") String expected3,
+            @QueryParam("expected4") String expected4,
+            @QueryParam("expected5") String expected5,
+            @QueryParam("force") boolean force,
+            @QueryParam("minimal_length") @DefaultValue("5") int minimalLength,
+            @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
             List<String> expectedLangs = expected.stream()
                     .map(ServiceUtilities::checkLanguage)
                     .collect(Collectors.toList());
-            if (expectedLangs.size() == 1){
-                expectedLangs = Arrays.asList(expectedLangs.get(0).split("[, ]"));
+            if (expectedLangs.size() == 1) {
+                expectedLangs = Arrays
+                        .asList(expectedLangs.get(0).split("[, ]"));
             }
-            for (String l: new String[] {
-                    expected1, expected2, expected3, expected4, expected5}) {
+            for (String l : new String[] { expected1, expected2, expected3,
+                    expected4, expected5 }) {
                 if (l != null)
                     expectedLangs.add(l);
             }
@@ -254,23 +275,23 @@ public class TEILicht {
      * segmentize TEI ISO document according to transcription conventions:
      *
      * @param input
-     *         a TEI-encoded speech transcription
+     *     a TEI-encoded speech transcription
      * @param level
-     *         the parsing level: generic, minimal, basic
+     *     the parsing level: generic, minimal, basic
      * @param request
-     *         the HTTP request
+     *     the HTTP request
      * @return a TEI-encoded speech transcription with annotation parsed
      */
     @POST
     @Path("segmentize")
-    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
-    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
 
     public Response segmentize(InputStream input,
-                               @DefaultValue("generic") @QueryParam("level") ProcessingLevel level,
-                               @Context HttpServletRequest request) {
+            @DefaultValue("generic") @QueryParam("level") ProcessingLevel level,
+            @Context HttpServletRequest request) {
         if (level == ProcessingLevel.generic)
             try {
                 DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -305,43 +326,41 @@ public class TEILicht {
      * Detect languages in a a TEI ISO transcription:
      *
      * @param input
-     *         a TEI-encoded speech transcription
+     *     a TEI-encoded speech transcription
      * @param language
-     *         the presumed language, preferably a ISO 639 code
+     *     the presumed language, preferably a ISO 639 code
      * @param transcribe
-     *         whether to add a phonetic transcription to the utterances if
-     *         possible
+     *     whether to add a phonetic transcription to the utterances if possible
      * @param usePhones
-     *         whether to use (pseudo)phones to determine relative duration
-     *         of words
+     *     whether to use (pseudo)phones to determine relative duration of words
      * @param force
-     *         whether to force normalization
+     *     whether to force normalization
      * @param request
-     *         the HTTP request
+     *     the HTTP request
      * @param time
-     *         the time length of the conversation in seconds
+     *     the time length of the conversation in seconds
      * @param offset
-     *         the time offset in seconds
+     *     the time offset in seconds
      * @param every
-     *         number of items after which to insert an orientation anchor
+     *     number of items after which to insert an orientation anchor
      * @return a TEI-encoded speech transcription with languages detected
      */
     @POST
     @Path("align")
-    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
-    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
 
     public Response align(InputStream input,
-                          @QueryParam("lang") String language,
-                          @QueryParam("transcribe") @DefaultValue("true") boolean transcribe,
-                          @QueryParam("use_phones") @DefaultValue("true") boolean usePhones,
-                          @QueryParam("force") boolean force,
-                          @QueryParam("time") @DefaultValue("-1.0") double time,
-                          @QueryParam("offset")  @DefaultValue("-1.0") double offset,
-                          @QueryParam("every") @DefaultValue("5") int every,
-                          @Context HttpServletRequest request) {
+            @QueryParam("lang") String language,
+            @QueryParam("transcribe") @DefaultValue("true") boolean transcribe,
+            @QueryParam("use_phones") @DefaultValue("true") boolean usePhones,
+            @QueryParam("force") boolean force,
+            @QueryParam("time") @DefaultValue("-1.0") double time,
+            @QueryParam("offset") @DefaultValue("-1.0") double offset,
+            @QueryParam("every") @DefaultValue("5") int every,
+            @Context HttpServletRequest request) {
         try {
             ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -357,8 +376,8 @@ public class TEILicht {
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
                     Anonymize.anonymizeAddress(request));
             aligner.calculateUtterances();
-            return Response.ok(aligner.getDoc(),
-                    request.getContentType()).build();
+            return Response.ok(aligner.getDoc(), request.getContentType())
+                    .build();
         } catch (IllegalArgumentException | SAXException
                 | ParserConfigurationException | IOException e) {
             throw new WebApplicationException(e,
@@ -370,20 +389,20 @@ public class TEILicht {
      * add IDs to XML elements for roundtripping
      *
      * @param input
-     *         a TEI-encoded speech transcription
+     *     a TEI-encoded speech transcription
      * @param request
-     *         the HTTP request
+     *     the HTTP request
      * @return a TEI-encoded speech transcription with IDs
      */
     @POST
     @Path("identify")
-    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
-    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
 
     public Response identify(InputStream input,
-                             @Context HttpServletRequest request) {
+            @Context HttpServletRequest request) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
@@ -408,20 +427,20 @@ public class TEILicht {
      * remove IDs from XML elements which are only used in roundtripping
      *
      * @param input
-     *         a TEI-encoded speech transcription
+     *     a TEI-encoded speech transcription
      * @param request
-     *         the HTTP request
+     *     the HTTP request
      * @return a TEI-encoded speech transcription without IDs
      */
     @POST
     @Path("unidentify")
-    @Consumes({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
-    @Produces({MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML})
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
 
     public Response unidentify(InputStream input,
-                               @Context HttpServletRequest request) {
+            @Context HttpServletRequest request) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
