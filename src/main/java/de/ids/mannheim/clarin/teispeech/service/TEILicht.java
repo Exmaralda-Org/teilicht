@@ -247,7 +247,7 @@ public class TEILicht {
             }
             for (String l : new String[] { expected1, expected2, expected3,
                     expected4, expected5 }) {
-                if (l != null)
+                if (l != null && !"unknown".equals(l))
                     expectedLangs.add(l);
             }
             DocumentBuilderFactory factory = DocumentBuilderFactory

@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.ids.mannheim.clarin.teilicht</groupId>
   <artifactId>teilicht</artifactId>
-  <version>0.4.1</version>
+  <version>0.4.2</version>
   <packaging>war</packaging>
   <name>TEILicht</name>
   <description>CLARIN Web Service for treating transcripts</description>
@@ -34,13 +34,18 @@
         </includes>
       </resource>
     </resources>
-    <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>3.2.3</version>
         <configuration>
           <warSourceDirectory>WebContent</warSourceDirectory>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+            </manifest>
+          </archive>
         </configuration>
       </plugin>
 
