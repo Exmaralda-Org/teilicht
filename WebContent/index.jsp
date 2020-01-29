@@ -20,8 +20,9 @@ html, body {
 }
 
 tt, code, pre, kbd, var, a.local_link {
-font-family: "Fira Mono", monospace;
+	font-family: "Fira Mono", monospace;
 }
+
 .attention b {
 	color: darkred;
 }
@@ -65,6 +66,7 @@ div.footer {
 div.outer_container {
 	text-align: center;
 	width: 100%;
+	margin-bottom: 10em
 }
 
 div.mid_container {
@@ -108,28 +110,50 @@ h1.title {
         </p>
         <p class="attention">
           <b>Caveat:</b> The links to the services are not useful and
-          are only present for ease of copying and pasting! <b>You must use the
-            HTTP POST method to make use of the web services.</b>
+          are only present for ease of copying and pasting! <b>You
+            must use the HTTP POST method to make use of the web
+            services.</b>
         </p>
         <ul class="service">
-          <li><b class="title">text2iso</b> (local URL: <a href="services/text2iso" class="local_link">services/text2iso</a>) <a class="doc" href="https://github.com/Exmaralda-Org/teispeechtools#user-content-plain-text-to-iso-tei-annotated-texts-cli-command-text2iso">[library documentation]</a>
-            – converting <a
+          <li><b class="title">text2iso</b> (local URL: <a
+            href="services/text2iso" class="local_link">services/text2iso</a>)
+            <a class="doc"
+            href="https://github.com/Exmaralda-Org/teispeechtools#user-content-plain-text-to-iso-tei-annotated-texts-cli-command-text2iso">[library
+              documentation]</a> – converting <a
             href="https://github.com/Exmaralda-Org/teispeechtools/blob/master/doc/Simple-EXMARaLDA.md">Plain
               Text</a> to ISO-TEI-annotated texts</li>
-          <li><b class="title">segmentize</b> (local URL: <a href="services/segmentize" class="local_link">services/segmentize</a>) <a class="doc" href="https://github.com/Exmaralda-Org/teispeechtools#user-content-segmentation-according-to-transcription-convention-cli-command-segmentize">[library documentation]</a>
-            – segmentation according to transcription conventions</li>
-          <li><b class="title">guess</b> (local URL: <a href="services/guess" class="local_link">services/guess</a>) <a class="doc" href="https://github.com/Exmaralda-Org/teispeechtools#user-content-language-detection-cli-command-guess">[library documentation]</a> –
-            language-detection</li>
-          <li><b class="title">normalize</b> (local URL: <a href="services/normalize" class="local_link">services/normalize</a>) <a class="doc" href="https://github.com/Exmaralda-Org/teispeechtools#user-content-orthonormal-like-normalization-command-normalize">[library documentation]</a>
-            – OrthoNormal-like Normalization</li>
-          <li><b class="title">pos</b> (local URL: <a href="services/pos" class="local_link">services/pos</a>) <a class="doc" href="https://github.com/Exmaralda-Org/teispeechtools#user-content-pos-tagging-with-the-treetagger-command-pos">[library documentation]</a> –
-            POS-Tagging with the TreeTagger</li>
-          <li><b class="title">align</b> (local URL: <a href="services/align" class="local_link">services/align</a>) <a class="doc" href="https://github.com/Exmaralda-Org/teispeechtools#user-content-pseudo-alignment-using-phonetic-transcription-or-orthographic-information-command-align">[library documentation]</a> –
-            Pseudo-alignment using Phonetic Transcription or
-            Orthographic Information</li>
-          <li><b class="title">identify</b> (local URL: <a href="services/identify" class="local_link">services/identify</a>) [no documentation]
-            and <b class="title">unidentify</b> (local URL: <a href="services/unidentify" class="local_link">services/unidentify</a>) [no documentation]
-            – adding and removing XML IDs</li>
+          <li><b class="title">segmentize</b> (local URL: <a
+            href="services/segmentize" class="local_link">services/segmentize</a>)
+            <a class="doc"
+            href="https://github.com/Exmaralda-Org/teispeechtools#user-content-segmentation-according-to-transcription-convention-cli-command-segmentize">[library
+              documentation]</a> – segmentation according to transcription
+            conventions</li>
+          <li><b class="title">guess</b> (local URL: <a
+            href="services/guess" class="local_link">services/guess</a>)
+            <a class="doc"
+            href="https://github.com/Exmaralda-Org/teispeechtools#user-content-language-detection-cli-command-guess">[library
+              documentation]</a> – language-detection</li>
+          <li><b class="title">normalize</b> (local URL: <a
+            href="services/normalize" class="local_link">services/normalize</a>)
+            <a class="doc"
+            href="https://github.com/Exmaralda-Org/teispeechtools#user-content-orthonormal-like-normalization-command-normalize">[library
+              documentation]</a> – OrthoNormal-like Normalization</li>
+          <li><b class="title">pos</b> (local URL: <a
+            href="services/pos" class="local_link">services/pos</a>) <a
+            class="doc"
+            href="https://github.com/Exmaralda-Org/teispeechtools#user-content-pos-tagging-with-the-treetagger-command-pos">[library
+              documentation]</a> – POS-Tagging with the TreeTagger</li>
+          <li><b class="title">align</b> (local URL: <a
+            href="services/align" class="local_link">services/align</a>)
+            <a class="doc"
+            href="https://github.com/Exmaralda-Org/teispeechtools#user-content-pseudo-alignment-using-phonetic-transcription-or-orthographic-information-command-align">[library
+              documentation]</a> – Pseudo-alignment using Phonetic
+            Transcription or Orthographic Information</li>
+          <li><b class="title">identify</b> (local URL: <a
+            href="services/identify" class="local_link">services/identify</a>)
+            [no documentation] and <b class="title">unidentify</b>
+            (local URL: <a href="services/unidentify" class="local_link">services/unidentify</a>)
+            [no documentation] – adding and removing XML IDs</li>
         </ul>
         <p class="info">
           Further information on the function of the services and their
