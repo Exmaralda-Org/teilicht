@@ -4,11 +4,10 @@
 <!DOCTYPE html>
 <%
     String title = "TEILicht: IDS Web Services for TEI-encoded Transcriptions of Spoken Language";
-    InputStream inputStream = getServletConfig().getServletContext()
-            .getResourceAsStream("/META-INF/MANIFEST.MF");
-    Manifest manifest = new Manifest(inputStream);
-    String version = manifest.getMainAttributes()
-            .getValue("Implementation-Version");
+			InputStream inputStream = getServletConfig().getServletContext()
+					.getResourceAsStream("/META-INF/MANIFEST.MF");
+			Manifest manifest = new Manifest(inputStream);
+			String version = manifest.getMainAttributes().getValue("Implementation-Version");
 %>
 <html>
 <head>
@@ -81,6 +80,15 @@ h1.title {
 	text-align: center;
 }
 </style>
+<script type="text/javascript">
+	function toClipboard(event, el) {
+		event.preventDefault();
+		navigator.clipboard.writeText(el.href);
+		alert("The full link to the service is '"
+				+ el.href
+				+ "'. It has been copied to the clipboard. Use it with the http POST method.")
+	}
+</script>
 <meta charset="UTF-8">
 <title><%=title%></title>
 </head>
@@ -99,57 +107,70 @@ h1.title {
         Transcription of spoken language</em>. The services are built on the
       <a href="https://github.com/Exmaralda-Org/teispeechtools">library
         <b class="library">teispeechtools</b>
-      </a>. Currently, we offer:
+      </a>; the <a href="https://github.com/Exmaralda-Org/teilicht">source
+        code of the services</a> is available on GitHub. Currently, we
+      offer:
     </p>
     <p class="attention">
       <b>Caveat:</b> The links to the services are not usable in the
       browser and are only present for ease of copying and pasting! <b>You
         must use the HTTP POST method to make use of the web services.</b>
+      Given a <a
+        href="https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText">modern
+        browser</a>, clicking on the links copies the URL to the clipboard.
     </p>
     <ul class="service">
       <li><b class="title">text2iso</b>: converting <a
         href="https://github.com/Exmaralda-Org/teispeechtools/blob/master/doc/Simple-EXMARaLDA.md">Plain
           Text</a> to ISO-TEI-annotated texts (local URL: <a
-        href="services/text2iso" class="local_link">services/text2iso</a>)
-        <a class="doc"
+        href="services/text2iso" class="local_link"
+        onclick="toClipboard(event, this)">services/text2iso</a>) <a
+        class="doc"
         href="https://github.com/Exmaralda-Org/teispeechtools#user-content-plain-text-to-iso-tei-annotated-texts-cli-command-text2iso">[library
           documentation]</a></li>
       <li><b class="title">segmentize</b>: segmentation according
         to transcription conventions (local URL: <a
-        href="services/segmentize" class="local_link">services/segmentize</a>)
-        <a class="doc"
+        href="services/segmentize" class="local_link"
+        onclick="toClipboard(event, this)">services/segmentize</a>) <a
+        class="doc"
         href="https://github.com/Exmaralda-Org/teispeechtools#user-content-segmentation-according-to-transcription-convention-cli-command-segmentize">[library
           documentation]</a></li>
       <li><b class="title">guess</b>: language-detection (local
-        URL: <a href="services/guess" class="local_link">services/guess</a>)
-        <a class="doc"
+        URL: <a href="services/guess" class="local_link"
+        onclick="toClipboard(event, this)">services/guess</a>) <a
+        class="doc"
         href="https://github.com/Exmaralda-Org/teispeechtools#user-content-language-detection-cli-command-guess">[library
           documentation]</a></li>
       <li><b class="title">normalize</b>: OrthoNormal-like
         Normalization (local URL: <a href="services/normalize"
-        class="local_link">services/normalize</a>) <a class="doc"
+        class="local_link" onclick="toClipboard(event, this)">services/normalize</a>)
+        <a class="doc"
         href="https://github.com/Exmaralda-Org/teispeechtools#user-content-orthonormal-like-normalization-command-normalize">[library
           documentation]</a></li>
       <li><b class="title">pos</b>: POS-Tagging with the TreeTagger
-        (local URL: <a href="services/pos" class="local_link">services/pos</a>)
-        <a class="doc"
+        (local URL: <a href="services/pos" class="local_link"
+        onclick="toClipboard(event, this)">services/pos</a>) <a
+        class="doc"
         href="https://github.com/Exmaralda-Org/teispeechtools#user-content-pos-tagging-with-the-treetagger-command-pos">[library
           documentation]</a></li>
       <li><b class="title">align</b>: Pseudo-alignment using
         Phonetic Transcription or Orthographic Information (local URL: <a
-        href="services/align" class="local_link">services/align</a>) <a
+        href="services/align" class="local_link"
+        onclick="toClipboard(event, this)">services/align</a>) <a
         class="doc"
         href="https://github.com/Exmaralda-Org/teispeechtools#user-content-pseudo-alignment-using-phonetic-transcription-or-orthographic-information-command-align">[library
           documentation]</a></li>
       <li><b class="title">identify</b> and <b class="title">unidentify</b>:
         adding and removing XML IDs (local URL: <a
-        href="services/identify" class="local_link">services/identify</a>)
-        [<a
+        href="services/identify" class="local_link"
+        onclick="toClipboard(event, this)">services/identify</a>) [<a
         class="doc"
-        href="https://github.com/Exmaralda-Org/teispeechtools#user-content-adding-and-removing-xmlid-command-identify-and-unidentify">library documentation</a>] and (local URL: <a href="services/unidentify"
-        class="local_link">services/unidentify</a>) [<a
-        class="doc"
-        href="https://github.com/Exmaralda-Org/teispeechtools#user-content-adding-and-removing-xmlid-command-identify-and-unidentify">library documentation</a>]</li>
+        href="https://github.com/Exmaralda-Org/teispeechtools#user-content-adding-and-removing-xmlid-command-identify-and-unidentify">library
+          documentation</a>] and (local URL: <a href="services/unidentify"
+        class="local_link" onclick="toClipboard(event, this)">services/unidentify</a>)
+        [<a class="doc"
+        href="https://github.com/Exmaralda-Org/teispeechtools#user-content-adding-and-removing-xmlid-command-identify-and-unidentify">library
+          documentation</a>]</li>
     </ul>
     <p class="info">
       Further information on the function of the services and their
