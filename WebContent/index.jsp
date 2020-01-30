@@ -83,10 +83,15 @@ h1.title {
 <script type="text/javascript">
 	function toClipboard(event, el) {
 		event.preventDefault();
-		navigator.clipboard.writeText(el.href);
+        navigator.clipboard.writeText(el.href).then(function() {
 		alert("The full link to the service is '"
 				+ el.href
-				+ "'. It has been copied to the clipboard. Use it with the http POST method.")
+				+ "'. It has been copied to the clipboard. Use it with the http POST method.");
+        }, function() {
+		alert("The full link to the service is '"
+				+ el.href
+				+ "'.  Use it with the http POST method.");
+        });
 	}
 </script>
 <meta charset="UTF-8">
