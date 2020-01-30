@@ -75,9 +75,12 @@ public class TEILicht {
             MIMETypes.XML })
 
     public Response text2iso(InputStream input,
-            @QueryParam("lang") String language,
+            @QueryParam("lang") String lang, @QueryParam("language") String language,
             @Context HttpServletRequest request) {
         try {
+            if (language == null || "".equals(language)) {
+                language = lang;
+            }
             ServiceUtilities.checkLanguage(language);
             LOGGER.info("Processing <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
@@ -118,11 +121,14 @@ public class TEILicht {
             MIMETypes.XML })
 
     public Response normalize(InputStream input,
-            @QueryParam("lang") String language,
+            @QueryParam("lang") String lang, @QueryParam("language") String language,
             @QueryParam("keep_case") boolean keepCase,
             @QueryParam("force") boolean force,
             @Context HttpServletRequest request) {
         try {
+            if (language == null || "".equals(language)) {
+                language = lang;
+            }
             ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
@@ -166,10 +172,13 @@ public class TEILicht {
     @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
             MIMETypes.XML })
 
-    public Response pos(InputStream input, @QueryParam("lang") String language,
+    public Response pos(InputStream input, @QueryParam("lang") String lang, @QueryParam("language") String language,
             @QueryParam("force") boolean force,
             @Context HttpServletRequest request) {
         try {
+            if (language == null || "".equals(language)) {
+                language = lang;
+            }
             ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
@@ -226,7 +235,7 @@ public class TEILicht {
             MIMETypes.XML })
 
     public Response guess(InputStream input,
-            @QueryParam("lang") String language,
+            @QueryParam("lang") String lang, @QueryParam("language") String language,
             @QueryParam("expected") List<String> expected,
             @QueryParam("expected1") String expected1,
             @QueryParam("expected2") String expected2,
@@ -237,6 +246,9 @@ public class TEILicht {
             @QueryParam("minimal_length") @DefaultValue("5") int minimalLength,
             @Context HttpServletRequest request) {
         try {
+            if (language == null || "".equals(language)) {
+                language = lang;
+            }
             ServiceUtilities.checkLanguage(language);
             List<String> expectedLangs = expected.stream()
                     .map(ServiceUtilities::checkLanguage)
@@ -353,7 +365,7 @@ public class TEILicht {
             MIMETypes.XML })
 
     public Response align(InputStream input,
-            @QueryParam("lang") String language,
+            @QueryParam("lang") String lang, @QueryParam("language") String language,
             @QueryParam("transcribe") @DefaultValue("true") boolean transcribe,
             @QueryParam("use_phones") @DefaultValue("true") boolean usePhones,
             @QueryParam("force") boolean force,
@@ -362,6 +374,9 @@ public class TEILicht {
             @QueryParam("every") @DefaultValue("5") int every,
             @Context HttpServletRequest request) {
         try {
+            if (language == null || "".equals(language)) {
+                language = lang;
+            }
             ServiceUtilities.checkLanguage(language);
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
