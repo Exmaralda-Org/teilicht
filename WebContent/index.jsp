@@ -68,12 +68,25 @@ p.attention, p.info {
 	padding: 1ex;
 }
 
+.footer_item {
+	display: table-cell;
+	margin: auto;
+	vertical-align: middle;
+}
+
 footer {
+	display: table-row;
 	margin-top: 2em;
 	text-align: center;
 	font-size: 87.5%;
 	letter-spacing: 0.1ex;
 	background-color: darkgrey;
+	padding: 1em;
+}
+
+p.bib {
+	margin-left: 2em;
+	text-indent: -2em;
 }
 
 h1.title {
@@ -83,15 +96,18 @@ h1.title {
 <script type="text/javascript">
 	function toClipboard(event, el) {
 		event.preventDefault();
-        navigator.clipboard.writeText(el.href).then(function() {
-		alert("The full link to the service is '"
-				+ el.href
-				+ "'. It has been copied to the clipboard. Use it with the http POST method.");
-        }, function() {
-		alert("The full link to the service is '"
-				+ el.href
-				+ "'.  Use it with the http POST method.");
-        });
+		navigator.clipboard
+				.writeText(el.href)
+				.then(
+						function() {
+							alert("The full link to the service is '"
+									+ el.href
+									+ "'. It has been copied to the clipboard. Use it with the http POST method.");
+						},
+						function() {
+							alert("The full link to the service is '" + el.href
+									+ "'.  Use it with the http POST method.");
+						});
 	}
 </script>
 <meta charset="UTF-8">
@@ -183,21 +199,45 @@ h1.title {
         href="https://github.com/Exmaralda-Org/teispeechtools">the
         documentation of the underlying library</a>.
     </p>
+
+    <h2>Background</h2>
+    <p>
+      TEILicht was developed within the CLARIN activities of the <a
+        href="http://www.ids-mannheim.de">Leibniz Institute for the
+        German Language</a> (IDS).
+    </p>
+    <p class="bib">
+      Bernhard Fisseni, Thomas Schmidt: CLARIN Web Services for
+      TEI-annotated Transcripts of Spoken Language. In Kiril Simov,
+      Maria Eskevich (eds.): <a
+        href="https://office.clarin.eu/v/CE-2019-1512_CLARIN2019_ConferenceProceedings.pdf">Proceedings
+        of the CLARIN Annual Conference 2019</a>. CLARIN ERIC: Leipzig.
+    </p>
   </main>
   <!-- Adjust if running locally: -->
   <footer>
-    <p>
-      TEILicht is hosted by the <a href="http://www.ids-mannheim.de">Leibniz
-        Institute for the German Language</a> (IDS) in Mannheim, Germany.
-      For further information, please contact <a
-        href="mailto:fisseni@ids-mannheim.de?subject=TEILicht">Bernhard
-        Fisseni</a> (services) or <a
-        href="mailto:thomas.schmidt@ids-mannheim.de?subject=TEILicht">Thomas
-        Schmidt</a> (transcription, AGD/DGD curation workflow).
-    </p>
-    <p>
-      TEILicht version <b><%=version%></b>
-    </p>
+    <div class="footer_item">
+      <a href="https://www.clarin.eu"><img width="100px"
+        src="images/clarin-eu-logo.png" alt="CLARIN-EU" border="0" /></a>
+    </div>
+    <div class="footer_item">
+      <p>
+        TEILicht is hosted by the <a href="http://www.ids-mannheim.de">Leibniz
+          Institute for the German Language</a> (IDS) in Mannheim, Germany.
+        For further information, please contact <a
+          href="mailto:fisseni@ids-mannheim.de?subject=TEILicht">Bernhard
+          Fisseni</a> (services) or <a
+          href="mailto:thomas.schmidt@ids-mannheim.de?subject=TEILicht">Thomas
+          Schmidt</a> (transcription, AGD/DGD curation workflow).
+      </p>
+      <p>
+        TEILicht version <b><%=version%></b>
+      </p>
+    </div>
+    <div class="footer_item">
+      <a href="https://www.clarin-d.net/"><img width="120px"
+        src="images/clarin-d-logo.png" alt="CLARIN-D" border="0" /></a>
+    </div>
   </footer>
 </body>
 </html>
