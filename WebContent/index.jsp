@@ -34,7 +34,7 @@ main {
 }
 
 main, footer {
-	max-width: 66em;
+	max-width: 55em;
 }
 
 tt, code, pre, kbd, var, a.local_link {
@@ -144,8 +144,12 @@ h1.title {
       <li><b class="title">identify</b> and <b class="title">unidentify</b>:
         adding and removing XML IDs (local URL: <a
         href="services/identify" class="local_link">services/identify</a>)
-        [no documentation] and (local URL: <a href="services/unidentify"
-        class="local_link">services/unidentify</a>) [no documentation]</li>
+        [<a
+        class="doc"
+        href="https://github.com/Exmaralda-Org/teispeechtools#user-content-adding-and-removing-xmlid-command-identify-and-unidentify">library documentation</a>] and (local URL: <a href="services/unidentify"
+        class="local_link">services/unidentify</a>) [<a
+        class="doc"
+        href="https://github.com/Exmaralda-Org/teispeechtools#user-content-adding-and-removing-xmlid-command-identify-and-unidentify">library documentation</a>]</li>
     </ul>
     <p class="info">
       Further information on the function of the services and their
