@@ -76,7 +76,7 @@ p.attention, p.info {
 	display: table-cell;
 	margin: auto;
 	vertical-align: middle;
-    font-size: 87.5%;
+	font-size: 87.5%;
 }
 
 footer {
@@ -85,7 +85,7 @@ footer {
 	text-align: center;
 	letter-spacing: 0.1ex;
 	/* background-color: darkgrey; */
-    border-top-style: solid;
+	border-top-style: solid;
 	padding: 1em;
 }
 
@@ -148,9 +148,10 @@ h1.title {
         clipboard.
       </p>
       <ul class="service">
-        <li><b class="title">text2iso</b>: converting <a
-          href="https://github.com/Exmaralda-Org/teispeechtools/blob/master/doc/Simple-EXMARaLDA.md">Plain
-            Text</a> to ISO-TEI-annotated texts (local URL: <a
+        <li><b class="title">text2iso</b>: converting plain text in
+          <a
+          href="https://github.com/Exmaralda-Org/teispeechtools/blob/master/doc/Simple-EXMARaLDA.md">Simple
+            EXMARaLDA format</a> to ISO-TEI-annotated texts (local URL: <a
           href="services/text2iso" class="local_link"
           onclick="toClipboard(event, this)">services/text2iso</a>) <a
           class="doc"
