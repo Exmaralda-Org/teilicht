@@ -76,15 +76,16 @@ p.attention, p.info {
 	display: table-cell;
 	margin: auto;
 	vertical-align: middle;
+    font-size: 87.5%;
 }
 
 footer {
 	display: table-row;
 	margin-top: 2em;
 	text-align: center;
-	font-size: 87.5%;
 	letter-spacing: 0.1ex;
-	background-color: darkgrey;
+	/* background-color: darkgrey; */
+    border-top-style: solid;
 	padding: 1em;
 }
 
@@ -214,11 +215,14 @@ h1.title {
           the German Language</a> (IDS).
       </p>
       <p class="bib">
-        Bernhard Fisseni, Thomas Schmidt: CLARIN Web Services for
-        TEI-annotated Transcripts of Spoken Language. In Kiril Simov,
-        Maria Eskevich (eds.): <a
-          href="https://office.clarin.eu/v/CE-2019-1512_CLARIN2019_ConferenceProceedings.pdf">Proceedings
-          of the CLARIN Annual Conference 2019</a>. CLARIN ERIC: Leipzig.
+        <a href="https://www.uni-due.de/~hg0132">Bernhard Fisseni</a>, <a
+          href="https://www1.ids-mannheim.de/prag/personal/schmidtthomas.html">Thomas
+          Schmidt</a>: “CLARIN Web Services for TEI-annotated Transcripts of
+        Spoken Language”. In Kiril Simov, Maria Eskevich (eds.): <a
+          href="https://office.clarin.eu/v/CE-2019-1512_CLARIN2019_ConferenceProceedings.pdf"><em>Proceedings
+            of the CLARIN Annual Conference 2019</em></a>. <a
+          href="http://www.clarin.eu">CLARIN ERIC</a>: <a
+          href="https://www.leipzig.de/">Leipzig</a>.
       </p>
     </section>
   </main>
@@ -231,8 +235,10 @@ h1.title {
     <div class="footer_item">
       <p>
         TEILicht is hosted by the <a href="http://www.ids-mannheim.de">Leibniz
-          Institute for the German Language</a> (IDS) in Mannheim, Germany.
-        For further information, please contact <a
+          Institute for the German Language</a> (IDS) in <a
+          href="https://www.mannheim.de">Mannheim</a>, <a
+          href="https://en.wikipedia.org/wiki/Germany">Germany</a>. For
+        further information, please contact <a
           href="mailto:fisseni@ids-mannheim.de?subject=TEILicht">Bernhard
           Fisseni</a> (services) or <a
           href="mailto:thomas.schmidt@ids-mannheim.de?subject=TEILicht">Thomas
