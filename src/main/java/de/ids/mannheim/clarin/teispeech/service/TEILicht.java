@@ -64,6 +64,9 @@ public class TEILicht {
      *     the input document – plain text!
      * @param language
      *     the presumed language, preferably a ISO 639 code
+     * @param lang
+     *     (alternative parameter name)
+     *     the presumed language, preferably a ISO 639 code
      * @param request
      *     the HTTP request
      * @return a TEI-encoded speech transcription
@@ -102,6 +105,9 @@ public class TEILicht {
      * @param input
      *     a TEI-encoded speech transcription
      * @param language
+     *     the presumed language, preferably a ISO 639 code
+     * @param lang
+     *     (alternative parameter name)
      *     the presumed language, preferably a ISO 639 code
      * @param keepCase
      *     if true, do not convert to lower case when normalizing and
@@ -158,6 +164,9 @@ public class TEILicht {
      * @param input
      *     a TEI-encoded speech transcription
      * @param language
+     *     the presumed language, preferably a ISO 639 code
+     * @param lang
+     *     (alternative parameter name)
      *     the presumed language, preferably a ISO 639 code
      * @param force
      *     whether to force normalization
@@ -218,6 +227,9 @@ public class TEILicht {
      * @param expected5
      *     expected language 5, as WebLicht can't handle lists
      * @param language
+     *     the presumed language, preferably a ISO 639 code
+     * @param lang
+     *     (alternative parameter name)
      *     the presumed language, preferably a ISO 639 code
      * @param force
      *     whether to force normalization
@@ -340,6 +352,9 @@ public class TEILicht {
      * @param input
      *     a TEI-encoded speech transcription
      * @param language
+     *     the presumed language, preferably a ISO 639 code
+     * @param lang
+     *     (alternative parameter name)
      *     the presumed language, preferably a ISO 639 code
      * @param transcribe
      *     whether to add a phonetic transcription to the utterances if possible
