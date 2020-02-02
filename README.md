@@ -11,10 +11,15 @@ of spoken data in [TEI](http://www.tei-c.org/release/doc/tei-p5-doc/en/html/TS.h
 It uses the functionality provided by the
 [TEI Speech Tools library](https://github.com/Exmaralda-Org/teispeechtools);
 for the documentation of services and parameters, see [there](https://github.com/Exmaralda-Org/teispeechtools).
+
+
+## Using TEILicht on-line
+
 A [running instance](https://clarin.ids-mannheim.de/teilicht) is provided by the
 [Leibniz Institute for the German Language](https://www.ids-mannheim.de).
 
-# Compilation
+
+# Compilation and Hosting TEILicht Yourself
 
 ## Dependencies
 
