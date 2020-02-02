@@ -54,4 +54,4 @@ The
 [WADL](https://en.wikipedia.org/wiki/Web_Application_Description_Language)
 file is at
 `SERVICE_NAME/services/application.wadl`, e.g. at IDS:
-[`clarin.ids-mannheim.de/teilicht/services/application.wadl`](clarin.ids-mannheim.de/teilicht/services/application.wadl).
+<https://clarin.ids-mannheim.de/teilicht/services/application.wadl>.
