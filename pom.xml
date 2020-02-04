@@ -86,6 +86,7 @@
         <configuration>
           <source>${maven.compiler.source}</source>
           <target>${maven.compiler.target}</target>
+          <showDeprecation>true</showDeprecation>
         </configuration>
       </plugin>
     </plugins>
@@ -174,4 +175,8 @@
       <version>1.1.1</version>
     </dependency-->
   </dependencies>
+  <organization>
+    <url>http://www.ids-mannheim.de</url>
+    <name>Leibniz-Institut für Deutsche Sprache</name>
+  </organization>
 </project>

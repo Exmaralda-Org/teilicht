@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
   pageEncoding="UTF-8"%>
-<%@ page import="java.io.*,java.util.jar.Manifest,java.io.IOException"%>
+<%@ page import="java.io.*,java.util.jar.Manifest"%>
 <!DOCTYPE html>
 <%
     String title = "TEILicht: IDS Web Services for TEI-encoded Transcriptions of Spoken Language";
@@ -218,12 +218,12 @@ h1.title {
       <p class="bib">
         <a href="https://www.uni-due.de/~hg0132">Bernhard Fisseni</a>, <a
           href="https://www1.ids-mannheim.de/prag/personal/schmidtthomas.html">Thomas
-          Schmidt</a>: “CLARIN Web Services for TEI-annotated Transcripts of
+          Schmidt</a> (2019): “CLARIN Web Services for TEI-annotated Transcripts of
         Spoken Language”. In Kiril Simov, Maria Eskevich (eds.): <a
-          href="https://office.clarin.eu/v/CE-2019-1512_CLARIN2019_ConferenceProceedings.pdf"><em>Proceedings
+          href="https://office.clarin.eu/v/CE-2019-1512_CLARIN2019_ConferenceProceedings.pdf#page=43"><em>Proceedings
             of the CLARIN Annual Conference 2019</em></a>. <a
           href="http://www.clarin.eu">CLARIN ERIC</a>: <a
-          href="https://www.leipzig.de/">Leipzig</a>.
+          href="https://www.leipzig.de/">Leipzig</a>, pp. 36–39.
       </p>
     </section>
   </main>
