@@ -255,7 +255,7 @@ public class TEILicht {
             @QueryParam("expected4") String expected4,
             @QueryParam("expected5") String expected5,
             @QueryParam("force") boolean force,
-            @QueryParam("minimal_length") @DefaultValue("5") int minimalLength,
+            @QueryParam("minimal") @DefaultValue("5") int minimalLength,
             @Context HttpServletRequest request) {
         try {
             if (language == null || "".equals(language)) {
@@ -282,10 +282,11 @@ public class TEILicht {
             Document doc = builder.parse(input);
             LanguageDetect guesser = new LanguageDetect(doc, language,
                     expectedLangs, minimalLength);
-            LOGGER.info("Processing <{}> of length {} for {}.",
+            LOGGER.info("Processing <{}> of length {} for {} [minimal length: {}].",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
-                    Anonymize.anonymizeAddress(request));
+                    Anonymize.anonymizeAddress(request),
+                    minimalLength);
             guesser.detect(force);
             return Response.ok(doc, request.getContentType()).build();
         } catch (IllegalArgumentException | SAXException
