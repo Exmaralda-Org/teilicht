@@ -385,7 +385,7 @@ public class TEILicht {
             @QueryParam("use_phones") @DefaultValue("true") boolean usePhones,
             @QueryParam("force") boolean force,
             @QueryParam("time") @DefaultValue("-1.0") double time,
-            @QueryParam("offset") @DefaultValue("-1.0") double offset,
+            @QueryParam("offset") @DefaultValue("0.0") double offset,
             @QueryParam("every") @DefaultValue("5") int every,
             @Context HttpServletRequest request) {
         try {
