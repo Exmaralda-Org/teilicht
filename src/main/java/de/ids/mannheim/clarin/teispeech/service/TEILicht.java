@@ -262,17 +262,17 @@ public class TEILicht {
                 language = lang;
             }
             ServiceUtilities.checkLanguage(language);
+            for (String l : new String[] { expected1, expected2, expected3,
+                    expected4, expected5 }) {
+                    expected.add(l);
+            }
             List<String> expectedLangs = expected.stream()
+                    .filter(l -> l != null && !l.isEmpty() && !"".equals(l))
                     .map(ServiceUtilities::checkLanguage)
                     .collect(Collectors.toList());
             if (expectedLangs.size() == 1) {
                 expectedLangs = Arrays
                         .asList(expectedLangs.get(0).split("[, ]"));
-            }
-            for (String l : new String[] { expected1, expected2, expected3,
-                    expected4, expected5 }) {
-                if (l != null && !"unknown".equals(l))
-                    expectedLangs.add(l);
             }
             DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
@@ -287,6 +287,7 @@ public class TEILicht {
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
                     Anonymize.anonymizeAddress(request),
                     minimalLength);
+            LOGGER.info("expected: {}", expectedLangs);
             guesser.detect(force);
             return Response.ok(doc, request.getContentType()).build();
         } catch (IllegalArgumentException | SAXException
