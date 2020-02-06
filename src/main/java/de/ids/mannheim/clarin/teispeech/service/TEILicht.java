@@ -65,8 +65,8 @@ public class TEILicht {
      * @param language
      *     the presumed language, preferably a ISO 639 code
      * @param lang
-     *     (alternative parameter name)
-     *     the presumed language, preferably a ISO 639 code
+     *     (alternative parameter name) the presumed language, preferably a ISO
+     *     639 code
      * @param request
      *     the HTTP request
      * @return a TEI-encoded speech transcription
@@ -77,15 +77,15 @@ public class TEILicht {
     @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
             MIMETypes.XML })
 
-    public Response text2iso(InputStream input,
-            @QueryParam("lang") String lang, @QueryParam("language") String language,
+    public Response text2iso(InputStream input, @QueryParam("lang") String lang,
+            @QueryParam("language") String language,
             @Context HttpServletRequest request) {
         try {
             if (language == null || "".equals(language)) {
                 language = lang;
             }
             ServiceUtilities.checkLanguage(language);
-            LOGGER.info("Processing <{}> of length {} for {}.",
+            LOGGER.info("TEILICHT text2iso <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
                     Anonymize.anonymizeAddress(request));
@@ -107,8 +107,8 @@ public class TEILicht {
      * @param language
      *     the presumed language, preferably a ISO 639 code
      * @param lang
-     *     (alternative parameter name)
-     *     the presumed language, preferably a ISO 639 code
+     *     (alternative parameter name) the presumed language, preferably a ISO
+     *     639 code
      * @param keepCase
      *     if true, do not convert to lower case when normalizing and
      *     effectively skip capitalized words
@@ -127,7 +127,8 @@ public class TEILicht {
             MIMETypes.XML })
 
     public Response normalize(InputStream input,
-            @QueryParam("lang") String lang, @QueryParam("language") String language,
+            @QueryParam("lang") String lang,
+            @QueryParam("language") String language,
             @QueryParam("keep_case") boolean keepCase,
             @QueryParam("force") boolean force,
             @Context HttpServletRequest request) {
@@ -145,7 +146,7 @@ public class TEILicht {
             DictionaryNormalizer diNo = new DictionaryNormalizer(keepCase,
                     false);
             TEINormalizer teiDictNormalizer = new TEINormalizer(diNo, language);
-            LOGGER.info("Processing <{}> of length {} for {}.",
+            LOGGER.info("TEILICHT normalize <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
                     Anonymize.anonymizeAddress(request));
@@ -166,8 +167,8 @@ public class TEILicht {
      * @param language
      *     the presumed language, preferably a ISO 639 code
      * @param lang
-     *     (alternative parameter name)
-     *     the presumed language, preferably a ISO 639 code
+     *     (alternative parameter name) the presumed language, preferably a ISO
+     *     639 code
      * @param force
      *     whether to force normalization
      * @param request
@@ -181,7 +182,8 @@ public class TEILicht {
     @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
             MIMETypes.XML })
 
-    public Response pos(InputStream input, @QueryParam("lang") String lang, @QueryParam("language") String language,
+    public Response pos(InputStream input, @QueryParam("lang") String lang,
+            @QueryParam("language") String language,
             @QueryParam("force") boolean force,
             @Context HttpServletRequest request) {
         try {
@@ -196,7 +198,7 @@ public class TEILicht {
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
             TEIPOS teipo = new TEIPOS(doc, language);
-            LOGGER.info("Processing <{}> of length {} for {}.",
+            LOGGER.info("TEILICHT pos <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
                     Anonymize.anonymizeAddress(request));
@@ -229,8 +231,8 @@ public class TEILicht {
      * @param language
      *     the presumed language, preferably a ISO 639 code
      * @param lang
-     *     (alternative parameter name)
-     *     the presumed language, preferably a ISO 639 code
+     *     (alternative parameter name) the presumed language, preferably a ISO
+     *     639 code
      * @param force
      *     whether to force normalization
      * @param minimalLength
@@ -246,8 +248,8 @@ public class TEILicht {
     @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
             MIMETypes.XML })
 
-    public Response guess(InputStream input,
-            @QueryParam("lang") String lang, @QueryParam("language") String language,
+    public Response guess(InputStream input, @QueryParam("lang") String lang,
+            @QueryParam("language") String language,
             @QueryParam("expected") List<String> expected,
             @QueryParam("expected1") String expected1,
             @QueryParam("expected2") String expected2,
@@ -264,7 +266,7 @@ public class TEILicht {
             ServiceUtilities.checkLanguage(language);
             for (String l : new String[] { expected1, expected2, expected3,
                     expected4, expected5 }) {
-                    expected.add(l);
+                expected.add(l);
             }
             List<String> expectedLangs = expected.stream()
                     .filter(l -> l != null && !l.isEmpty() && !"".equals(l))
@@ -282,11 +284,11 @@ public class TEILicht {
             Document doc = builder.parse(input);
             LanguageDetect guesser = new LanguageDetect(doc, language,
                     expectedLangs, minimalLength);
-            LOGGER.info("Processing <{}> of length {} for {} [minimal length: {}].",
+            LOGGER.info(
+                    "TEILICHT guess <{}> of length {} for {} [minimal length: {}].",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
-                    Anonymize.anonymizeAddress(request),
-                    minimalLength);
+                    Anonymize.anonymizeAddress(request), minimalLength);
             LOGGER.info("expected: {}", expectedLangs);
             guesser.detect(force);
             return Response.ok(doc, request.getContentType()).build();
@@ -356,8 +358,8 @@ public class TEILicht {
      * @param language
      *     the presumed language, preferably a ISO 639 code
      * @param lang
-     *     (alternative parameter name)
-     *     the presumed language, preferably a ISO 639 code
+     *     (alternative parameter name) the presumed language, preferably a ISO
+     *     639 code
      * @param transcribe
      *     whether to add a phonetic transcription to the utterances if possible
      * @param usePhones
@@ -381,10 +383,10 @@ public class TEILicht {
     @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
             MIMETypes.XML })
 
-    public Response align(InputStream input,
-            @QueryParam("lang") String lang, @QueryParam("language") String language,
-            @QueryParam("transcribe") @DefaultValue("true") boolean transcribe,
-            @QueryParam("use_phones") @DefaultValue("true") boolean usePhones,
+    public Response align(InputStream input, @QueryParam("lang") String lang,
+            @QueryParam("language") String language,
+            @QueryParam("transcribe") boolean transcribe,
+            @QueryParam("use_phones") boolean usePhones,
             @QueryParam("force") boolean force,
             @QueryParam("time") @DefaultValue("-1.0") double time,
             @QueryParam("offset") @DefaultValue("0.0") double offset,
@@ -403,10 +405,17 @@ public class TEILicht {
             Document doc = builder.parse(input);
             PseudoAlign aligner = new PseudoAlign(doc, language, usePhones,
                     transcribe, force, time, offset, every);
-            LOGGER.info("Processing <{}> of length {} for {}.",
+            LOGGER.info(
+                    "TeiLicht ALIGN <{}> of length {} for {}. [force: {}, use_phones: {}, transcribe: {}]",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
-                    Anonymize.anonymizeAddress(request));
+                    Anonymize.anonymizeAddress(request), force, usePhones,
+                    transcribe);
+            LOGGER.info("force: {}, use_phones: {}, transcribe: {} [{}]",
+                    request.getParameter("force"),
+                    request.getParameter("use_phones"),
+                    request.getParameter("transcribe"),
+                    request.getParameterMap().keySet());
             aligner.calculateUtterances();
             return Response.ok(aligner.getDoc(), request.getContentType())
                     .build();
@@ -443,7 +452,7 @@ public class TEILicht {
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
             DocumentIdentifier.makeIDs(doc);
-            LOGGER.info("Processing <{}> of length {} for {}.",
+            LOGGER.info("TEILICHT identify <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
                     Anonymize.anonymizeAddress(request));
@@ -481,7 +490,7 @@ public class TEILicht {
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(input);
             DocumentIdentifier.removeIDs(doc);
-            LOGGER.info("Processing <{}> of length {} for {}.",
+            LOGGER.info("TEILICHT unidentify <{}> of length {} for {}.",
                     request.getHeader(HttpHeaders.CONTENT_TYPE),
                     request.getHeader(HttpHeaders.CONTENT_LENGTH),
                     Anonymize.anonymizeAddress(request));
