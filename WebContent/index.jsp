@@ -15,105 +15,105 @@
   href="https://code.cdn.mozilla.net/fonts/fira.css">
 <style type="text/css">
 html, body {
-	font-family: "Fira Sans", sans-serif;
+  font-family: "Fira Sans", sans-serif;
 }
 
 body {
-	display: flex;
-	min-height: 100vh;
-	margin: 0 auto;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center; /*NEW*/
+  display: flex;
+  min-height: 100vh;
+  margin: 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /*NEW*/
 }
 
 main {
-	min-height: 5em;
-	flex: 1;
+  min-height: 5em;
+  flex: 1;
 }
 
 section {
-	padding-top: 1.5em;
+  padding-top: 1.5em;
 }
 
 main, footer {
-	max-width: 55em;
+  max-width: 55em;
 }
 
 tt, code, pre, kbd, var, a.local_link {
-	font-family: "Fira Mono", monospace;
+  font-family: "Fira Mono", monospace;
 }
 
 .attention b {
-	color: darkred;
+  color: darkred;
 }
 
 .info b, .info a, a.doc, b.library {
-	color: darkgreen;
-	font-weight: bold;
+  color: darkgreen;
+  font-weight: bold;
 }
 
 .service a.title {
-	color: darkblue;
-	font-weight: bold;
+  color: darkblue;
+  font-weight: bold;
 }
 
 p.info {
-	border-color: darkgreen;
+  border-color: darkgreen;
 }
 
 p.attention {
-	border-color: darkred;
+  border-color: darkred;
 }
 
 p.attention, p.info {
-	border-width: 3px;
-	background: lightgrey;
-	padding: 1ex;
+  border-width: 3px;
+  background: lightgrey;
+  padding: 1ex;
 }
 
 .footer_item {
-	display: table-cell;
-	margin: auto;
-	vertical-align: middle;
-	font-size: 87.5%;
+  display: table-cell;
+  margin: auto;
+  vertical-align: middle;
+  font-size: 87.5%;
 }
 
 footer {
-	display: table-row;
-	margin-top: 2em;
-	text-align: center;
-	letter-spacing: 0.1ex;
-	/* background-color: darkgrey; */
-	border-top-style: solid;
-	padding: 1em;
+  display: table-row;
+  margin-top: 2em;
+  text-align: center;
+  letter-spacing: 0.1ex;
+  /* background-color: darkgrey; */
+  border-top-style: solid;
+  padding: 1em;
 }
 
 p.bib {
-	margin-left: 2em;
-	text-indent: -2em;
+  margin-left: 2em;
+  text-indent: -2em;
 }
 
 h1.title {
-	text-align: center;
+  text-align: center;
 }
 </style>
 <script type="text/javascript">
-	function toClipboard(event, el) {
-		event.preventDefault();
-		navigator.clipboard
-				.writeText(el.href)
-				.then(
-						function() {
-							alert("The full link to the service is '"
-									+ el.href
-									+ "'. It has been copied to the clipboard. Use it with the http POST method.");
-						},
-						function() {
-							alert("The full link to the service is '" + el.href
-									+ "'.  Use it with the http POST method.");
-						});
-	}
+    function toClipboard(event, el) {
+        event.preventDefault();
+        navigator.clipboard
+                .writeText(el.href)
+                .then(
+                        function () {
+                            alert("The full link to the service is '"
+                                    + el.href
+                                    + "'. It has been copied to the clipboard. Use it with the http POST method.");
+                        },
+                        function () {
+                            alert("The full link to the service is '" + el.href
+                                    + "'.  Use it with the http POST method.");
+                        });
+    }
 </script>
 <meta charset="UTF-8">
 <title><%=title%></title>
@@ -164,6 +164,16 @@ h1.title {
           class="doc"
           href="https://github.com/Exmaralda-Org/teispeechtools#user-content-segmentation-according-to-transcription-convention-cli-command-segmentize">[library
             documentation]</a></li>
+        <li><b class="title">text2iso</b>: Combines the <b
+          class="title">text2iso</b> and <b class="title">segmentize</b>.
+          (local URL: <a href="services/segmentize" class="local_link"
+          onclick="toClipboard(event, this)">services/segmentize</a>).
+          See <a class="doc"
+          href="https://github.com/Exmaralda-Org/teispeechtools#user-content-plain-text-to-iso-tei-annotated-texts-cli-command-text2iso">[documentation
+            of <kbd>text2iso</kbd>]
+        </a> and a class="doc"
+          href="https://github.com/Exmaralda-Org/teispeechtools#user-content-segmentation-according-to-transcription-convention-cli-command-segmentize">[documentation
+          of <kbd>segmentize</kbd>]</a> for parameters.
         <li><b class="title">guess</b>: language-detection (local
           URL: <a href="services/guess" class="local_link"
           onclick="toClipboard(event, this)">services/guess</a>) <a
@@ -218,8 +228,9 @@ h1.title {
       <p class="bib">
         <a href="https://www.uni-due.de/~hg0132">Bernhard Fisseni</a>, <a
           href="https://www1.ids-mannheim.de/prag/personal/schmidtthomas.html">Thomas
-          Schmidt</a> (2019): “CLARIN Web Services for TEI-annotated Transcripts of
-        Spoken Language”. In Kiril Simov, Maria Eskevich (eds.): <a
+          Schmidt</a> (2019): “CLARIN Web Services for TEI-annotated
+        Transcripts of Spoken Language”. In Kiril Simov, Maria Eskevich
+        (eds.): <a
           href="https://office.clarin.eu/v/CE-2019-1512_CLARIN2019_ConferenceProceedings.pdf#page=43"><em>Proceedings
             of the CLARIN Annual Conference 2019</em></a>. <a
           href="http://www.clarin.eu">CLARIN ERIC</a>: <a

@@ -1,26 +1,11 @@
 package de.ids.mannheim.clarin.teispeech.service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import de.ids.mannheim.clarin.mime.MIMETypes;
+import de.ids.mannheim.clarin.teispeech.data.GATParser;
+import de.ids.mannheim.clarin.teispeech.data.LanguageDetect;
+import de.ids.mannheim.clarin.teispeech.tools.ProcessingLevel;
+import de.ids.mannheim.clarin.teispeech.utilities.ServiceUtilities;
+import de.ids.mannheim.clarin.teispeech.workflow.*;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.jdom2.JDOMException;
@@ -31,19 +16,19 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import de.ids.mannheim.clarin.mime.MIMETypes;
-import de.ids.mannheim.clarin.teispeech.data.DocUtilities;
-import de.ids.mannheim.clarin.teispeech.data.GATParser;
-import de.ids.mannheim.clarin.teispeech.data.LanguageDetect;
-import de.ids.mannheim.clarin.teispeech.tools.ProcessingLevel;
-import de.ids.mannheim.clarin.teispeech.utilities.ServiceUtilities;
-import de.ids.mannheim.clarin.teispeech.workflow.DictionaryNormalizer;
-import de.ids.mannheim.clarin.teispeech.workflow.DocumentIdentifier;
-import de.ids.mannheim.clarin.teispeech.workflow.GenericParsing;
-import de.ids.mannheim.clarin.teispeech.workflow.PseudoAlign;
-import de.ids.mannheim.clarin.teispeech.workflow.TEINormalizer;
-import de.ids.mannheim.clarin.teispeech.workflow.TEIPOS;
-import de.ids.mannheim.clarin.teispeech.workflow.TextToTEIConversion;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Webservices for dealing with TEI-encoded documents
@@ -98,6 +83,116 @@ public class TEILicht {
                     Response.status(400).entity(e.getMessage()).build());
         }
     }
+
+    /**
+     * segmentize TEI ISO document according to transcription conventions:
+     *
+     * @param input
+     *     a TEI-encoded speech transcription
+     * @param level
+     *     the parsing level: generic, minimal, basic
+     * @param request
+     *     the HTTP request
+     * @return a TEI-encoded speech transcription with annotation parsed
+     */
+    @POST
+    @Path("segmentize")
+    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+
+    public Response segmentize(InputStream input,
+            @DefaultValue("generic") @QueryParam("level") ProcessingLevel level,
+            @Context HttpServletRequest request) {
+        if (level == ProcessingLevel.generic)
+            try {
+                DocumentBuilderFactory factory = DocumentBuilderFactory
+                        .newInstance();
+                factory.setNamespaceAware(true);
+                DocumentBuilder builder;
+                builder = factory.newDocumentBuilder();
+                Document doc = builder.parse(input);
+                GenericParsing.process(doc);
+                return Response.ok(doc, request.getContentType()).build();
+            } catch (SAXException | IOException
+                    | ParserConfigurationException e) {
+                throw new WebApplicationException(e,
+                        Response.status(400).entity(e.getMessage()).build());
+            }
+        else
+            try {
+                org.jdom2.Document doc = Utilities.parseXMLviaJDOM(input);
+                GATParser parser = new GATParser();
+                parser.parseDocument(doc, level.ordinal() + 1);
+                return Response.ok(Utilities.convertJDOMToDOM(doc),
+                        request.getContentType()).build();
+            } catch (IllegalArgumentException | IOException | JDOMException e) {
+                throw new WebApplicationException(e,
+                        Response.status(400).entity(e.getMessage()).build());
+            }
+    }
+
+    /**
+     * convert from plain text to a TEI ISO transcription:
+     * segmentize TEI ISO document according to transcription conventions:
+     *
+     * @param input
+     *     the input document – plain text!
+     * @param language
+     *     the presumed language, preferably a ISO 639 code
+     * @param lang
+     *     (alternative parameter name) the presumed language, preferably a ISO
+     *     639 code
+     * @param level
+     *     the parsing level: generic, minimal, basic
+     * @param request
+     *     the HTTP request
+     * @return a TEI-encoded speech transcription with annotation parsed
+     */
+    @POST
+    @Path("text2seg")
+    @Consumes({ MIMETypes.PLAIN_TEXT, MIMETypes.SIMPLE_EXMARALDA })
+    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
+            MIMETypes.XML })
+
+    public Response text2seg(InputStream input, @QueryParam("lang") String lang,
+            @QueryParam("language") String language,
+            @DefaultValue("generic") @QueryParam("level") ProcessingLevel level,
+            @Context HttpServletRequest request) {
+        try {
+            if (language == null || "".equals(language)) {
+                language = lang;
+            }
+            ServiceUtilities.checkLanguage(language);
+            LOGGER.info("TEILICHT text2seg <{}> of length {} for {}.",
+                    request.getHeader(HttpHeaders.CONTENT_TYPE),
+                    request.getHeader(HttpHeaders.CONTENT_LENGTH),
+                    Anonymize.anonymizeAddress(request));
+            CharStream inputCS;
+            inputCS = CharStreams.fromStream(input);
+            Document doc = TextToTEIConversion.process(inputCS, language);
+            if (level == ProcessingLevel.generic) {
+                GenericParsing.process(doc);
+                return Response.ok(doc, request.getContentType()).build();
+            }
+            else
+                try {
+                    org.jdom2.Document jDoc = Utilities.convertDOMtoJDOM(doc);
+                    GATParser parser = new GATParser();
+                    parser.parseDocument(jDoc, level.ordinal() + 1);
+                    return Response.ok(Utilities.convertJDOMToDOM(jDoc),
+                            request.getContentType()).build();
+                } catch (IllegalArgumentException | IOException | JDOMException e) {
+                    throw new WebApplicationException(e,
+                            Response.status(400).entity(e.getMessage()).build());
+                }
+        } catch (IOException e) {
+            throw new WebApplicationException(e,
+                    Response.status(400).entity(e.getMessage()).build());
+        }
+    }
+
 
     /**
      * normalize using an EXMARaLDA-OrthoNormal-based normalizer:
@@ -297,57 +392,6 @@ public class TEILicht {
             throw new WebApplicationException(e,
                     Response.status(400).entity(e.getMessage()).build());
         }
-    }
-
-    /**
-     * segmentize TEI ISO document according to transcription conventions:
-     *
-     * @param input
-     *     a TEI-encoded speech transcription
-     * @param level
-     *     the parsing level: generic, minimal, basic
-     * @param request
-     *     the HTTP request
-     * @return a TEI-encoded speech transcription with annotation parsed
-     */
-    @POST
-    @Path("segmentize")
-    @Consumes({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
-    @Produces({ MIMETypes.TEI_SPOKEN, MIMETypes.DTA, MIMETypes.TEI,
-            MIMETypes.XML })
-
-    public Response segmentize(InputStream input,
-            @DefaultValue("generic") @QueryParam("level") ProcessingLevel level,
-            @Context HttpServletRequest request) {
-        if (level == ProcessingLevel.generic)
-            try {
-                DocumentBuilderFactory factory = DocumentBuilderFactory
-                        .newInstance();
-                factory.setNamespaceAware(true);
-                DocumentBuilder builder;
-                builder = factory.newDocumentBuilder();
-                Document doc = builder.parse(input);
-                GenericParsing.process(doc);
-                return Response.ok(doc, request.getContentType()).build();
-            } catch (SAXException | IOException
-                    | ParserConfigurationException e) {
-                throw new WebApplicationException(e,
-                        Response.status(400).entity(e.getMessage()).build());
-            }
-        else
-            try {
-                org.jdom2.Document doc = Utilities.parseXMLviaJDOM(input);
-                GATParser parser = new GATParser();
-                parser.parseDocument(doc, level.ordinal() + 1);
-                DocUtilities.makeChange(doc, String.format(
-                        "utterances parsed to %s conventions", level.name()));
-                return Response.ok(Utilities.convertJDOMToDOM(doc),
-                        request.getContentType()).build();
-            } catch (IllegalArgumentException | IOException | JDOMException e) {
-                throw new WebApplicationException(e,
-                        Response.status(400).entity(e.getMessage()).build());
-            }
     }
 
     /**
