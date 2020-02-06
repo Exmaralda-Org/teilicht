@@ -164,7 +164,7 @@ h1.title {
           class="doc"
           href="https://github.com/Exmaralda-Org/teispeechtools#user-content-segmentation-according-to-transcription-convention-cli-command-segmentize">[library
             documentation]</a></li>
-        <li><b class="title">text2iso</b>: Combines the <b
+        <li><b class="title">text2seg</b>: Combines the <b
           class="title">text2iso</b> and <b class="title">segmentize</b>.
           (local URL: <a href="services/segmentize" class="local_link"
           onclick="toClipboard(event, this)">services/segmentize</a>).
