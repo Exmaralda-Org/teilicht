@@ -9,6 +9,14 @@
   <packaging>war</packaging>
   <name>TEILicht</name>
   <description>CLARIN Web Service for treating transcripts</description>
+  <organization>
+    <url>http://www.ids-mannheim.de</url>
+    <name>Leibniz-Institut für Deutsche Sprache</name>
+  </organization>
+  <contributors>
+    <contributor><name>Bernhard Fisseni</name><email>fisseni@ids-mannheim.de</email><url>https://github.com/teoric</url></contributor>
+    <contributor><name>Thomas Schmidt</name><email>thomas.schmidt@ids-mannheim.de</email><url>https://github.com/berndmoos</url></contributor>
+  </contributors>
   <properties>
     <!-- project settings -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -175,8 +183,4 @@
       <version>1.1.1</version>
     </dependency-->
   </dependencies>
-  <organization>
-    <url>http://www.ids-mannheim.de</url>
-    <name>Leibniz-Institut für Deutsche Sprache</name>
-  </organization>
 </project>
