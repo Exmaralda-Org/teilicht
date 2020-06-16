@@ -171,9 +171,9 @@ h1.title {
           See <a class="doc"
           href="https://github.com/Exmaralda-Org/teispeechtools#user-content-plain-text-to-iso-tei-annotated-texts-cli-command-text2iso">[documentation
             of <kbd>text2iso</kbd>]
-        </a> and a class="doc"
+        </a> and <a class="doc"
           href="https://github.com/Exmaralda-Org/teispeechtools#user-content-segmentation-according-to-transcription-convention-cli-command-segmentize">[documentation
-          of <kbd>segmentize</kbd>]</a> for parameters.
+          of <kbd>segmentize</kbd>]</a> for parameters.</li>
         <li><b class="title">guess</b>: language-detection (local
           URL: <a href="services/guess" class="local_link"
           onclick="toClipboard(event, this)">services/guess</a>) <a

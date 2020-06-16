@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.jdom2.JDOMException;
 import org.korpora.useful.Anonymize;
-import org.korpora.useful.Utilities;
+import org.korpora.useful.XMLUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -122,10 +122,10 @@ public class TEILicht {
             }
         else
             try {
-                org.jdom2.Document doc = Utilities.parseXMLviaJDOM(input);
+                org.jdom2.Document doc = XMLUtilities.parseXMLviaJDOM(input);
                 GATParser parser = new GATParser();
                 parser.parseDocument(doc, level.ordinal() + 1);
-                return Response.ok(Utilities.convertJDOMToDOM(doc),
+                return Response.ok(XMLUtilities.convertJDOMToDOM(doc),
                         request.getContentType()).build();
             } catch (IllegalArgumentException | IOException | JDOMException e) {
                 throw new WebApplicationException(e,
@@ -178,10 +178,10 @@ public class TEILicht {
             }
             else
                 try {
-                    org.jdom2.Document jDoc = Utilities.convertDOMtoJDOM(doc);
+                    org.jdom2.Document jDoc = XMLUtilities.convertDOMtoJDOM(doc);
                     GATParser parser = new GATParser();
                     parser.parseDocument(jDoc, level.ordinal() + 1);
-                    return Response.ok(Utilities.convertJDOMToDOM(jDoc),
+                    return Response.ok(XMLUtilities.convertJDOMToDOM(jDoc),
                             request.getContentType()).build();
                 } catch (IllegalArgumentException | IOException | JDOMException e) {
                     throw new WebApplicationException(e,
