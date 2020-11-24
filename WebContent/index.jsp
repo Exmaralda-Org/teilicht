@@ -228,13 +228,9 @@ h1.title {
       <p class="bib">
         <a href="https://www.uni-due.de/~hg0132">Bernhard Fisseni</a>, <a
           href="https://www1.ids-mannheim.de/prag/personal/schmidtthomas.html">Thomas
-          Schmidt</a> (2019): “CLARIN Web Services for TEI-annotated
-        Transcripts of Spoken Language”. In Kiril Simov, Maria Eskevich
-        (eds.): <a
-          href="https://office.clarin.eu/v/CE-2019-1512_CLARIN2019_ConferenceProceedings.pdf#page=43"><em>Proceedings
-            of the CLARIN Annual Conference 2019</em></a>. <a
-          href="http://www.clarin.eu">CLARIN ERIC</a>: <a
-          href="https://www.leipzig.de/">Leipzig</a>, pp. 36–39.
+          Schmidt</a> (2020): <a href="https://ep.liu.se/en/conference-article.aspx?series=ecp&issue=172&Article_No=3">“CLARIN Web Services for TEI-annotated
+        Transcripts of Spoken Language”</a>. In: <a
+          href="https://office.clarin.eu/v/CE-2019-1512_CLARIN2019_ConferenceProceedings.pdf#page=43"><em>Selected Papers from the CLARIN Annual Conference 2019</em></a>. Linköping University Electronic Press: Linköping, pp. 12–22.
       </p>
     </section>
   </main>
