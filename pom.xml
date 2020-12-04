@@ -32,7 +32,7 @@
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
     <jersey.version>2.32</jersey.version>
-    <jackson.version>2.11.3</jackson.version>
+    <jackson.version>2.12</jackson.version>
     <dependency.locations.enabled>false</dependency.locations.enabled>
   </properties>
   <build>
@@ -82,7 +82,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>3.2.0</version>
         <configuration>
           <failOnError>false</failOnError>
           <source>${maven.compiler.source}</source>
@@ -194,6 +194,11 @@
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
       <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>2.1.1</version>
     </dependency>
   </dependencies>
 </project>
