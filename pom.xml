@@ -162,12 +162,6 @@
       <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/jakarta.ws.rs/jakarta.ws.rs-api -->
-    <dependency>
-      <groupId>jakarta.ws.rs</groupId>
-      <artifactId>jakarta.ws.rs-api</artifactId>
-      <version>3.0.0</version>
-    </dependency>
     <!-- https://mvnrepository.com/artifact/com.ibm.icu/icu4j -->
     <dependency>
       <groupId>com.ibm.icu</groupId>
