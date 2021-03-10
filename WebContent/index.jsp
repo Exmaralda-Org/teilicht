@@ -247,7 +247,7 @@ h1.title {
           href="https://www.mannheim.de">Mannheim</a>, <a
           href="https://en.wikipedia.org/wiki/Germany">Germany</a>. For
         further information, please contact <a
-          href="mailto:fisseni@ids-mannheim.de?subject=TEILicht">Bernhard
+          href="mailto:bernhard.fisseni@uni-due.de?subject=TEILicht">Bernhard
           Fisseni</a> (services) or <a
           href="mailto:thomas.schmidt@ids-mannheim.de?subject=TEILicht">Thomas
           Schmidt</a> (transcription, AGD/DGD curation workflow).
