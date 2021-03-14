@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.ids.mannheim.clarin.teilicht</groupId>
   <artifactId>teilicht</artifactId>
-  <version>0.5.1</version>
+  <version>0.5.2</version>
   <packaging>war</packaging>
   <name>TEILicht</name>
   <description>CLARIN Web Service for treating transcripts</description>
@@ -14,16 +14,29 @@
     <name>Leibniz-Institut für Deutsche Sprache</name>
   </organization>
   <contributors>
-  <contributor>
-    <name>Bernhard Fisseni</name>
-    <email>bernhard.fisseni@uni-due.de</email>
-    <url>https://github.com/teoric</url>
-  </contributor>
-  <contributor>
-    <name>Thomas Schmidt</name>
-    <email>thomas.schmidt@ids-mannheim.de</email>
-    <url>https://github.com/berndmoos</url>
-  </contributor>
+    <contributor>
+      <name>Bernhard Fisseni</name>
+      <email>bernhard.fisseni@uni-due.de</email>
+      <url>https://github.com/teoric</url>
+        <roles>
+          <role>developer</role>
+        </roles>
+    </contributor>
+    <contributor>
+      <name>Thomas Schmidt</name>
+      <email>thomas.schmidt@ids-mannheim.de</email>
+      <url>https://github.com/berndmoos</url>
+        <roles>
+          <role>developer</role>
+        </roles>
+    </contributor>
+    <contributor>
+      <name>Eliza Margaretha Illig</name>
+      <email>margaretha@ids-mannheim.de</email>
+      <roles>
+        <role>maintainer</role>
+      </roles>
+    </contributor>
   </contributors>
   <properties>
     <!-- project settings -->
@@ -117,7 +130,7 @@
     <dependency>
       <groupId>de.ids-mannheim.clarin</groupId>
       <artifactId>teispeechtools</artifactId>
-      <version>0.7.2</version>
+      <version>0.7.3</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.inject</groupId>

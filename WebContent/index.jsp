@@ -245,10 +245,10 @@ h1.title {
         TEILicht is hosted by the <a href="http://www.ids-mannheim.de">Leibniz
           Institute for the German Language</a> (IDS) in <a
           href="https://www.mannheim.de">Mannheim</a>, <a
-          href="https://en.wikipedia.org/wiki/Germany">Germany</a>. For
-        further information, please contact <a
-          href="mailto:bernhard.fisseni@uni-due.de?subject=TEILicht">Bernhard
-          Fisseni</a> (services) or <a
+          href="https://en.wikipedia.org/wiki/Germany">Germany</a>.
+          For maintenance issues and technical support, please contact <a
+          href="mailto:margaretha@ids-mannheim.de?subject=TEILicht">Eliza Margaretha Illig
+</a> (services) or <a
           href="mailto:thomas.schmidt@ids-mannheim.de?subject=TEILicht">Thomas
           Schmidt</a> (transcription, AGD/DGD curation workflow).
       </p>
