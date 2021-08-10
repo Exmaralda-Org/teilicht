@@ -45,7 +45,7 @@
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
     <jersey.version>2.32</jersey.version>
-    <jackson.version>2.12</jackson.version>
+    <jackson.version>2.12.4</jackson.version>
     <dependency.locations.enabled>false</dependency.locations.enabled>
   </properties>
   <build>
@@ -162,6 +162,11 @@
       <groupId>org.glassfish.jersey.media</groupId>
       <artifactId>jersey-media-json-jackson</artifactId>
       <version>${jersey.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
